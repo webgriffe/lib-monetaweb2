@@ -2,6 +2,7 @@
 
 namespace spec\Webgriffe\LibMonetaWebDue\PaymentInit;
 
+use Psr\Log\LoggerInterface;
 use Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator;
 use PhpSpec\ObjectBehavior;
 
@@ -103,5 +104,41 @@ class UrlGeneratorSpec extends ObjectBehavior
                 '&cardHolderEmail=nome%40dominio.com' .
                 '&customField=campoPersonalizzabile'
             );
+    }
+
+    public function it_should_log_generated_url_if_a_logger_is_given(LoggerInterface $logger)
+    {
+        $generatedUrl = 'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet' .
+            '?id=99999999' .
+            '&password=99999999' .
+            '&operationType=initialize' .
+            '&amount=1428.70' .
+            '&currencyCode=978' .
+            '&language=ITA' .
+            '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
+            '&recoveryUrl=http%3A%2F%2Fwww.merchant.it%2Ferror.jsp' .
+            '&merchantOrderId=TRCK0001' .
+            '&description=Descrizione' .
+            '&cardHolderName=NomeCognome' .
+            '&cardHolderEmail=nome%40dominio.com' .
+            '&customField=campoPersonalizzabile';
+
+        $this->beConstructedWith($logger);
+        $logger->debug('Generated URL is: '.$generatedUrl)->shouldBeCalled();
+        $this->generate(
+            'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+            '99999999',
+            '99999999',
+            1428.7,
+            'EUR',
+            'ITA',
+            'http://www.merchant.it/notify.jsp',
+            'http://www.merchant.it/error.jsp',
+            'TRCK0001',
+            'Descrizione',
+            'NomeCognome',
+            'nome@dominio.com',
+            'campoPersonalizzabile'
+        );
     }
 }

@@ -2,9 +2,20 @@
 
 namespace Webgriffe\LibMonetaWebDue\PaymentInit;
 
+use Psr\Log\LoggerInterface;
+
 class UrlGenerator
 {
     const OPERATION_TYPE_INITIALIZE = 'initialize';
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger = null)
+    {
+        $this->logger = $logger;
+    }
 
     public function generate(
         $baseUrl,
@@ -37,7 +48,9 @@ class UrlGenerator
             'cardHolderEmail' => $cardholderEmail,
             'customField' => $customField,
         ];
-        return $baseUrl . '?' . http_build_query($params);
+        $generatedUrl = $baseUrl . '?' . http_build_query($params);
+        $this->debug('Generated URL is: ' . $generatedUrl);
+        return $generatedUrl;
     }
 
 
@@ -112,5 +125,15 @@ class UrlGenerator
             return 'USA';
         }
         return $language;
+    }
+
+    /**
+     * @param $message
+     */
+    private function debug($message)
+    {
+        if ($this->logger) {
+            $this->logger->debug($message);
+        }
     }
 }
