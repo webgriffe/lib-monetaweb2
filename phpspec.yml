@@ -1,0 +1,4 @@
+suites:
+  webgriffe_lib_monetaweb2_suite:
+      namespace: Webgriffe\LibMonetaWebDue
+      psr4_prefix: Webgriffe\LibMonetaWebDue
