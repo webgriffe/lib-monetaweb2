@@ -28,7 +28,7 @@ class UrlGenerator
             'operationType' => self::OPERATION_TYPE_INITIALIZE,
             'amount' => number_format($amount, 2, '.', ''),
             'currencyCode' => $this->getCurrencyNumericCode($currencyCode),
-            'language' => $language,
+            'language' => $this->validateLanguage($language),
             'responseToMerchantUrl' => $responseToMerchantUrl,
             'recoveryUrl' => $recoveryUrl,
             'merchantOrderId' => $orderId,
@@ -94,7 +94,7 @@ class UrlGenerator
             'ZAR' => '710',
         );
         if (!array_key_exists($currencyCode, $map)) {
-            throw new \RuntimeException(
+            throw new \InvalidArgumentException(
                 sprintf(
                     'Cannot get the numeric code for currency "%s", is not one of the supported currencies.',
                     $currencyCode
@@ -102,5 +102,15 @@ class UrlGenerator
             );
         }
         return $map[$currencyCode];
+    }
+
+    private function validateLanguage($language)
+    {
+        $allowedLanguages = ['DEU', 'FRA', 'ITA', 'POR', 'RUS', 'SPA', 'USA'];
+
+        if(!in_array($language, $allowedLanguages, true)) {
+            return 'USA';
+        }
+        return $language;
     }
 }
