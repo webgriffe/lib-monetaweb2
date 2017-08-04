@@ -2,6 +2,7 @@
 
 namespace Webgriffe\LibMonetaWebDue\PaymentInit;
 
+use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
 class UrlGenerator
@@ -33,6 +34,14 @@ class UrlGenerator
         $customField = null
     )
     {
+
+        if(empty($baseUrl) || empty($terminalId) || empty($terminalPassword) || $amount === null) {
+            throw new InvalidArgumentException('Base Url, Terminal ID, Terminal Password and Amount ere required');
+        }
+
+        if($amount === 0) {
+            throw new InvalidArgumentException('Amount should be grater than zero');
+        }
 
         $params = [
             'id' => $terminalId,

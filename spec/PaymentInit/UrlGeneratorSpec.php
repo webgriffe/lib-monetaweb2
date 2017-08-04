@@ -168,4 +168,37 @@ class UrlGeneratorSpec extends ObjectBehavior
             );
     }
 
+    public function it_should_throw_error_when_required_parameters_are_not_given()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                '99999999',
+                '99999999',
+                null,
+                null,
+                'ITA',
+                'http://www.merchant.it/notify.jsp',
+                null,
+                'TRCK0001'
+            );
+    }
+
+    public function it_should_throw_error_when_amount_is_zero()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                '99999999',
+                '99999999',
+                0,
+                null,
+                'ITA',
+                'http://www.merchant.it/notify.jsp',
+                null,
+                'TRCK0001'
+            );
+    }
+
+
 }
