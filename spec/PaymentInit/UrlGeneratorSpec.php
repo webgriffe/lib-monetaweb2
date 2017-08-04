@@ -141,4 +141,31 @@ class UrlGeneratorSpec extends ObjectBehavior
             'campoPersonalizzabile'
         );
     }
+
+    public function it_generates_correct_url_when_only_required_params_are_given()
+    {
+        $this
+            ->generate(
+                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                '99999999',
+                '99999999',
+                1428.7,
+                null,
+                'ITA',
+                'http://www.merchant.it/notify.jsp',
+                null,
+                'TRCK0001'
+            )
+            ->shouldReturn(
+                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet' .
+                '?id=99999999' .
+                '&password=99999999' .
+                '&operationType=initialize' .
+                '&amount=1428.70' .
+                '&language=ITA' .
+                '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
+                '&merchantOrderId=TRCK0001'
+            );
+    }
+
 }

@@ -27,18 +27,19 @@ class UrlGenerator
         $responseToMerchantUrl,
         $recoveryUrl,
         $orderId,
-        $paymentDescription,
-        $cardHolderName,
-        $cardholderEmail,
-        $customField
+        $paymentDescription = null,
+        $cardHolderName = null,
+        $cardholderEmail = null,
+        $customField = null
     )
     {
+
         $params = [
             'id' => $terminalId,
             'password' => $terminalPassword,
             'operationType' => self::OPERATION_TYPE_INITIALIZE,
             'amount' => number_format($amount, 2, '.', ''),
-            'currencyCode' => $this->getCurrencyNumericCode($currencyCode),
+            'currencyCode' => $currencyCode ? $this->getCurrencyNumericCode($currencyCode) : null,
             'language' => $this->validateLanguage($language),
             'responseToMerchantUrl' => $responseToMerchantUrl,
             'recoveryUrl' => $recoveryUrl,
