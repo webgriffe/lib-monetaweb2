@@ -29,8 +29,7 @@ class GatewayClient
         $cardHolderName = null,
         $cardholderEmail = null,
         $customField = null
-    )
-    {
+    ) {
         $urlGenerator = new UrlGenerator();
         $paymentInitUrl = $urlGenerator->generate(
             $baseUrl,
@@ -57,7 +56,6 @@ class GatewayClient
         $securityToken = (string)$parsedResponseBody->securitytoken;
         $hostedpageurl .= (parse_url($hostedpageurl, PHP_URL_QUERY) ? '&' : '?') . 'paymentid=' .$paymentid;
 
-        $gatewayPageInfo = new GatewayPageInfo($hostedpageurl, $securityToken);
-        return $gatewayPageInfo;
+        return new GatewayPageInfo($hostedpageurl, $securityToken);
     }
 }

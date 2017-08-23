@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Webgriffe\LibMonetaWebDue\Api;
-
 
 class GatewayPageInfo
 {

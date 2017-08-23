@@ -32,14 +32,13 @@ class UrlGenerator
         $cardHolderName = null,
         $cardholderEmail = null,
         $customField = null
-    )
-    {
+    ) {
 
-        if(empty($baseUrl) || empty($terminalId) || empty($terminalPassword) || $amount === null) {
+        if (empty($baseUrl) || empty($terminalId) || empty($terminalPassword) || $amount === null) {
             throw new InvalidArgumentException('Base Url, Terminal ID, Terminal Password and Amount ere required');
         }
 
-        if($amount === 0) {
+        if ($amount === 0) {
             throw new InvalidArgumentException('Amount should be grater than zero');
         }
 
@@ -131,7 +130,7 @@ class UrlGenerator
     {
         $allowedLanguages = ['DEU', 'FRA', 'ITA', 'POR', 'RUS', 'SPA', 'USA'];
 
-        if(!in_array($language, $allowedLanguages, true)) {
+        if (!in_array($language, $allowedLanguages, true)) {
             return 'USA';
         }
         return $language;
