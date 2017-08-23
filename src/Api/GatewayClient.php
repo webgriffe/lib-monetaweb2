@@ -1,13 +1,11 @@
 <?php
 
-
 namespace Webgriffe\LibMonetaWebDue\Api;
-
 
 use GuzzleHttp\Psr7\Request;
 use Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator;
 
-class Client
+class GatewayClient
 {
     /** @var  \GuzzleHttp\ClientInterface $client */
     private $client;
@@ -17,7 +15,7 @@ class Client
         $this->client = $client;
     }
 
-    public function getGatewayPageUrl(
+    public function getPaymentPageInfo(
         $baseUrl,
         $terminalId,
         $terminalPassword,
