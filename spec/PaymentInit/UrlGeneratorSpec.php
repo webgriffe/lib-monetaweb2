@@ -200,5 +200,43 @@ class UrlGeneratorSpec extends ObjectBehavior
             );
     }
 
+    public function it_should_throw_exception_when_terminal_id_is_too_long()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                '99999999111',
+                '99999999',
+                1428.7,
+                'EUR',
+                'ITA',
+                'http://www.merchant.it/notify.jsp',
+                'http://www.merchant.it/error.jsp',
+                'TRCK0001',
+                'Descrizione',
+                'NomeCognome',
+                'nome@dominio.com',
+                'campoPersonalizzabile'
+            );
+    }
 
+    public function it_should_throw_exception_when_amount_format_is_wrong()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                '99999999',
+                '99999999',
+                'a',
+                'EUR',
+                'ITA',
+                'http://www.merchant.it/notify.jsp',
+                'http://www.merchant.it/error.jsp',
+                'TRCK0001',
+                'Descrizione',
+                'NomeCognome',
+                'nome@dominio.com',
+                'campoPersonalizzabile'
+            );
+    }
 }

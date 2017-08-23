@@ -4,6 +4,7 @@ namespace Webgriffe\LibMonetaWebDue\PaymentInit;
 
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Respect\Validation\Validator;
 
 class UrlGenerator
 {
@@ -40,6 +41,14 @@ class UrlGenerator
 
         if ($amount === 0) {
             throw new InvalidArgumentException('Amount should be grater than zero');
+        }
+
+        try {
+            Validator::stringType()->length(1, 8)->assert($terminalId);
+            Validator::stringType()->length(1, 50)->assert($terminalPassword);
+            Validator::floatType()->assert($amount);
+        } catch (\Exception $e) {
+            throw new InvalidArgumentException($e->getMessage());
         }
 
         $params = [

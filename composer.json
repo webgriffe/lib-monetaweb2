@@ -8,7 +8,8 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "respect/validation": "^1.1"
     },
     "require-dev": {
         "phpspec/phpspec": "^3.4",
