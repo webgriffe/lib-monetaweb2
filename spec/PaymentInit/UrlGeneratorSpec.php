@@ -239,4 +239,64 @@ class UrlGeneratorSpec extends ObjectBehavior
                 'campoPersonalizzabile'
             );
     }
+
+    public function it_should_throw_exception_when_response_to_merchant_url_is_wrong()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                '99999999',
+                '99999999',
+                1428.7,
+                'EUR',
+                'ITA',
+                'httpwww.merchant.it/notify.jsp',
+                'http://www.merchant.it/error.jsp',
+                'TRCK0001',
+                'Descrizione',
+                'NomeCognome',
+                'nome@dominio.com',
+                'campoPersonalizzabile'
+            );
+    }
+
+    public function it_should_throw_exception_when_rrecovery_url_is_wrong()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                '99999999',
+                '99999999',
+                1428.7,
+                'EUR',
+                'ITA',
+                'http://www.merchant.it/notify.jsp',
+                'httpwww.merchant.it/error.jsp',
+                'TRCK0001',
+                'Descrizione',
+                'NomeCognome',
+                'nome@dominio.com',
+                'campoPersonalizzabile'
+            );
+    }
+
+    public function it_should_throw_exception_when_merchant_order_id_is_wrong()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                '99999999',
+                '99999999',
+                1428.7,
+                'EUR',
+                'ITA',
+                'http://www.merchant.it/notify.jsp',
+                'http://www.merchant.it/error.jsp',
+                '__123-- A',
+                'Descrizione',
+                'NomeCognome',
+                'nome@dominio.com',
+                'campoPersonalizzabile'
+            );
+    }
 }

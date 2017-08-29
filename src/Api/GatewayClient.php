@@ -51,11 +51,11 @@ class GatewayClient
         $response = $this->client->send($request);
 
         $parsedResponseBody = simplexml_load_string($response->getBody());
-        $hostedpageurl = (string)$parsedResponseBody->hostedpageurl;
-        $paymentid = (string)$parsedResponseBody->paymentid;
+        $hostedPageUrl = (string)$parsedResponseBody->hostedpageurl;
+        $paymentId = (string)$parsedResponseBody->paymentid;
         $securityToken = (string)$parsedResponseBody->securitytoken;
-        $hostedpageurl .= (parse_url($hostedpageurl, PHP_URL_QUERY) ? '&' : '?') . 'paymentid=' .$paymentid;
+        $hostedPageUrl .= (parse_url($hostedPageUrl, PHP_URL_QUERY) ? '&' : '?') . 'paymentid=' .$paymentId;
 
-        return new GatewayPageInfo($hostedpageurl, $securityToken);
+        return new GatewayPageInfo($hostedPageUrl, $securityToken);
     }
 }

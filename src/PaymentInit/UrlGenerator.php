@@ -47,6 +47,13 @@ class UrlGenerator
             Validator::stringType()->length(1, 8)->assert($terminalId);
             Validator::stringType()->length(1, 50)->assert($terminalPassword);
             Validator::floatType()->assert($amount);
+            Validator::url()->length(1, 2048)->assert($responseToMerchantUrl);
+            Validator::optional(Validator::url()->length(null, 2048))->assert($recoveryUrl);
+            Validator::alnum()->noWhitespace()->length(1, 18)->assert($orderId);
+            Validator::optional(Validator::length(null, 255))->assert($paymentDescription);
+            Validator::optional(Validator::length(null, 125))->assert($cardHolderName);
+            Validator::optional(Validator::length(null, 125))->assert($cardholderEmail);
+            Validator::optional(Validator::length(null, 255))->assert($customField);
         } catch (\Exception $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
