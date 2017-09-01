@@ -2,15 +2,16 @@
 
 namespace Webgriffe\LibMonetaWebDue\Api;
 
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Request;
 use Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator;
 
 class GatewayClient
 {
-    /** @var  \GuzzleHttp\ClientInterface $client */
+    /** @var ClientInterface $client */
     private $client;
 
-    public function __construct($client)
+    public function __construct(ClientInterface $client)
     {
         $this->client = $client;
     }
