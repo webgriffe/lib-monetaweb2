@@ -48,7 +48,7 @@ class GatewayClient
             $customField
         );
 
-        $request = new Request('GET', $paymentInitUrl);
+        $request = new Request('POST', $paymentInitUrl);
         $response = $this->client->send($request);
 
         $parsedResponseBody = simplexml_load_string($response->getBody());
