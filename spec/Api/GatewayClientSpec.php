@@ -2,7 +2,6 @@
 
 namespace spec\Webgriffe\LibMonetaWebDue\Api;
 
-use Doctrine\Instantiator\Exception\InvalidArgumentException;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Response;
 use PhpSpec\ObjectBehavior;
@@ -58,15 +57,42 @@ XML;
         $this->beConstructedWith($client);
         $this->shouldThrow(\InvalidArgumentException::class)
             ->duringGetPaymentPageInfo(
-            null,
-            null,
-            null,
-            null,
-            null,
-            'ITA',
-            'http://www.merchant.it/notify.jsp',
-            null,
-            'TRCK0001'
-        );
+                null,
+                null,
+                null,
+                null,
+                null,
+                'ITA',
+                'http://www.merchant.it/notify.jsp',
+                null,
+                'TRCK0001'
+            );
+    }
+
+    public function it_should_throw_exception_when_the_gateway_response_is_an_error(ClientInterface $client)
+    {
+        $expectedResponseBody = <<<XML
+<?xml version='1.0' ?>
+<error>
+<errorcode>XYZ123</errorcode>
+<errormessage>Invalid amount</errormessage>
+</error>
+XML;
+        $expectedResponse = new Response(200, [], $expectedResponseBody);
+
+        $client->send(Argument::type(RequestInterface::class))->shouldBeCalled()->willReturn($expectedResponse);
+        $this->beConstructedWith($client);
+        $this->shouldThrow(\RuntimeException::class)
+            ->duringGetPaymentPageInfo(
+                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                '99999999',
+                '99999999',
+                1428.7,
+                null,
+                'ITA',
+                'http://www.merchant.it/notify.jsp',
+                null,
+                'TRCK0001'
+            );
     }
 }

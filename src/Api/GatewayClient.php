@@ -16,6 +16,25 @@ class GatewayClient
         $this->client = $client;
     }
 
+    /** @noinspection MoreThanThreeArgumentsInspection */
+    /**
+     * @param string $baseUrl
+     * @param string $terminalId
+     * @param string $terminalPassword
+     * @param float $amount
+     * @param string $currencyCode
+     * @param string $language
+     * @param string $responseToMerchantUrl
+     * @param string|null $recoveryUrl
+     * @param string $orderId
+     * @param string|null $paymentDescription
+     * @param string|null $cardHolderName
+     * @param string|null $cardholderEmail
+     * @param string|null $customField
+     * @return GatewayPageInfo
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \RuntimeException
+     */
     public function getPaymentPageInfo(
         $baseUrl,
         $terminalId,
@@ -52,10 +71,21 @@ class GatewayClient
         $response = $this->client->send($request);
 
         $parsedResponseBody = simplexml_load_string($response->getBody());
+        // todo: log request and response
+        if (isset($parsedResponseBody->errorcode) || isset($parsedResponseBody->errormessage)) {
+            throw new \RuntimeException(
+                sprintf(
+                    'The request sent to MonetaWebDue gateway generated an error with code "%s" and message: %s',
+                    $parsedResponseBody->errorCode,
+                    $parsedResponseBody->errorMessage
+                )
+            );
+        }
+
         $hostedPageUrl = (string)$parsedResponseBody->hostedpageurl;
         $paymentId = (string)$parsedResponseBody->paymentid;
         $securityToken = (string)$parsedResponseBody->securitytoken;
-        $hostedPageUrl .= (parse_url($hostedPageUrl, PHP_URL_QUERY) ? '&' : '?') . 'paymentid=' .$paymentId;
+        $hostedPageUrl .= (parse_url($hostedPageUrl, PHP_URL_QUERY) ? '&' : '?') . 'paymentid=' . $paymentId;
 
         return new GatewayPageInfo($hostedPageUrl, $securityToken);
     }
