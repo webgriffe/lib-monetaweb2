@@ -4,8 +4,6 @@ namespace spec\Webgriffe\LibMonetaWebDue\PaymentNotification;
 
 use GuzzleHttp\Psr7\ServerRequest;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Prophecy\ObjectProphecy;
-use Psr\Http\Message\ServerRequestInterface;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Mapper;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\PaymentResultInfo;
 
@@ -16,9 +14,6 @@ class MapperSpec extends ObjectBehavior
         $this->shouldHaveType(Mapper::class);
     }
 
-    /**
-     * @param \PhpSpec\Wrapper\Collaborator|ServerRequestInterface|ObjectProphecy $request
-     */
     public function it_should_create_payment_result_info()
     {
         $request = new ServerRequest(

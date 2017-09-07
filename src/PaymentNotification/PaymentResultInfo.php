@@ -1,11 +1,10 @@
 <?php
 
-
 namespace Webgriffe\LibMonetaWebDue\PaymentNotification;
-
 
 class PaymentResultInfo
 {
+    const SUCCESSFUL_RESPONSE_CODE = '000';
 
     private $authorizationCode;
     private $cardCountry;
@@ -20,20 +19,28 @@ class PaymentResultInfo
     private $securityToken;
     private $threeDSecure;
 
+    const TRANSACTION_AUTHORIZED_CODE = 'APPROVED';
+    const TRANSACTION_CAPTURED_CODE = 'CAPTURED';
+    const TRANSACTION_CANCELED_CODE = 'CANCELED';
 
     public function isAuthorizationOnly()
     {
-
+        return $this->result === self::TRANSACTION_AUTHORIZED_CODE;
     }
 
-    public function isAuthorizationCapture()
+    public function isAuthorizationCaptured()
     {
-
+        return $this->result === self::TRANSACTION_CAPTURED_CODE;
     }
 
-    public function isSuccess()
+    public function isCanceled()
     {
+        return $this->result === self::TRANSACTION_CANCELED_CODE;
+    }
 
+    public function isSuccessful()
+    {
+        return $this->responseCode === self::SUCCESSFUL_RESPONSE_CODE;
     }
 
     /**
