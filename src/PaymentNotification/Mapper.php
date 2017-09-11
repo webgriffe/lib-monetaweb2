@@ -23,6 +23,7 @@ class Mapper
         $paymentResultInfo->setCustomField($requestBody['customfield']);
         $paymentResultInfo->setMaskedPan($requestBody['maskedpan']);
         $paymentResultInfo->setMerchantOrderId($requestBody['merchantorderid']);
+        $paymentResultInfo->setPaymentId($requestBody['paymentid']);
         $paymentResultInfo->setResponseCode($requestBody['responsecode']);
         $paymentResultInfo->setResult($requestBody['result']);
         $paymentResultInfo->setRetrievalReferenceNumber($requestBody['rrn']);

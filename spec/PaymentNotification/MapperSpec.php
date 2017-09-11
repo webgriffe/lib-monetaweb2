@@ -25,6 +25,7 @@ class MapperSpec extends ObjectBehavior
             'customfield' => 'some custom field',
             'maskedpan' => '483054******1294',
             'merchantorderid' => 'TRCK0001',
+            'paymentid' => '123456789012345678',
             'responsecode' => '000',
             'result' => 'APPROVED',
             'rrn' => '123456789012',
@@ -41,6 +42,7 @@ class MapperSpec extends ObjectBehavior
         $expectedPaymentResult->setCustomField('some custom field');
         $expectedPaymentResult->setMaskedPan('483054******1294');
         $expectedPaymentResult->setMerchantOrderId('TRCK0001');
+        $expectedPaymentResult->setPaymentId('123456789012345678');
         $expectedPaymentResult->setResponseCode('000');
         $expectedPaymentResult->setResult('APPROVED');
         $expectedPaymentResult->setRetrievalReferenceNumber('123456789012');
