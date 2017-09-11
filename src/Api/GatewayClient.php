@@ -4,7 +4,11 @@ namespace Webgriffe\LibMonetaWebDue\Api;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\ServerRequestInterface;
 use Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator;
+use Webgriffe\LibMonetaWebDue\PaymentNotification\Mapper;
+use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInfo;
+use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInterface;
 
 class GatewayClient
 {
@@ -18,7 +22,7 @@ class GatewayClient
 
     /** @noinspection MoreThanThreeArgumentsInspection */
     /**
-     * @param string $baseUrl
+     * @param string $gatewayBaseUrl
      * @param string $terminalId
      * @param string $terminalPassword
      * @param float $amount
@@ -36,7 +40,7 @@ class GatewayClient
      * @throws \RuntimeException
      */
     public function getPaymentPageInfo(
-        $baseUrl,
+        $gatewayBaseUrl,
         $terminalId,
         $terminalPassword,
         $amount,
@@ -52,7 +56,7 @@ class GatewayClient
     ) {
         $urlGenerator = new UrlGenerator();
         $paymentInitUrl = $urlGenerator->generate(
-            $baseUrl,
+            $gatewayBaseUrl,
             $terminalId,
             $terminalPassword,
             $amount,
@@ -89,5 +93,28 @@ class GatewayClient
         $hostedPageUrl .= (parse_url($hostedPageUrl, PHP_URL_QUERY) ? '&' : '?') . 'paymentid=' . $paymentId;
 
         return new GatewayPageInfo($hostedPageUrl, $securityToken);
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @return PaymentResultInterface
+     */
+    public function handleNotify(ServerRequestInterface $request)
+    {
+        $mapper = new Mapper();
+        return $mapper->map($request);
+    }
+
+    /**
+     * @param string $storedSecurityToken
+     * @param PaymentResultInfo $paymentResult
+     * @return bool
+     */
+    public function verifySecurityToken($storedSecurityToken, PaymentResultInfo $paymentResult)
+    {
+        if (function_exists('hash_equals')) {
+            return hash_equals($storedSecurityToken, $paymentResult->getSecurityToken());
+        }
+        return strcmp($storedSecurityToken, $paymentResult->getSecurityToken()) === 0;
     }
 }

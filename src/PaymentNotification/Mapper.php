@@ -8,27 +8,37 @@ class Mapper
 {
     /**
      * @param ServerRequestInterface $request
-     * @return PaymentResultInfo
+     * @return Result\PaymentResultInterface
      */
     public function map(ServerRequestInterface $request)
     {
-        // todo: validation
-        // todo: error
-        $paymentResultInfo = new PaymentResultInfo();
         $requestBody = $request->getParsedBody();
-        $paymentResultInfo->setAuthorizationCode($requestBody['authorizationcode']);
-        $paymentResultInfo->setCardCountry($requestBody['cardcountry']);
-        $paymentResultInfo->setCardExpiryDate($requestBody['cardexpirydate']);
-        $paymentResultInfo->setCardType($requestBody['cardtype']);
-        $paymentResultInfo->setCustomField($requestBody['customfield']);
-        $paymentResultInfo->setMaskedPan($requestBody['maskedpan']);
-        $paymentResultInfo->setMerchantOrderId($requestBody['merchantorderid']);
-        $paymentResultInfo->setPaymentId($requestBody['paymentid']);
-        $paymentResultInfo->setResponseCode($requestBody['responsecode']);
-        $paymentResultInfo->setResult($requestBody['result']);
-        $paymentResultInfo->setRetrievalReferenceNumber($requestBody['rrn']);
-        $paymentResultInfo->setSecurityToken($requestBody['securitytoken']);
-        $paymentResultInfo->setThreeDSecure($requestBody['threedsecure']);
+        $requestBody = array_change_key_case($requestBody, CASE_LOWER);
+
+        if (isset($requestBody['errorcode'])) {
+            $paymentError = new Result\PaymentResultErrorInfo(
+                $requestBody['errorcode'],
+                $requestBody['errormessage'],
+                $requestBody['paymentid']
+            );
+            return $paymentError;
+        }
+
+        $paymentResultInfo = new Result\PaymentResultInfo(
+            $requestBody['authorizationcode'],
+            $requestBody['cardcountry'],
+            $requestBody['cardexpirydate'],
+            $requestBody['cardtype'],
+            $requestBody['customfield'],
+            $requestBody['maskedpan'],
+            $requestBody['merchantorderid'],
+            $requestBody['paymentid'],
+            $requestBody['responsecode'],
+            $requestBody['result'],
+            $requestBody['rrn'],
+            $requestBody['securitytoken'],
+            $requestBody['threedsecure']
+        );
 
         return $paymentResultInfo;
     }
