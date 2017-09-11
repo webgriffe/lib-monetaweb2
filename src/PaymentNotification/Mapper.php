@@ -6,8 +6,14 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Mapper
 {
+    /**
+     * @param ServerRequestInterface $request
+     * @return PaymentResultInfo
+     */
     public function map(ServerRequestInterface $request)
     {
+        // todo: validation
+        // todo: error
         $paymentResultInfo = new PaymentResultInfo();
         $requestBody = $request->getParsedBody();
         $paymentResultInfo->setAuthorizationCode($requestBody['authorizationcode']);

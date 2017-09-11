@@ -72,6 +72,7 @@ class GatewayClient
 
         $parsedResponseBody = simplexml_load_string($response->getBody());
         // todo: log request and response
+        // todo: it could throw a custom exception that encapsulate the error code and message
         if (isset($parsedResponseBody->errorcode) || isset($parsedResponseBody->errormessage)) {
             throw new \RuntimeException(
                 sprintf(

@@ -16,11 +16,7 @@ class MapperSpec extends ObjectBehavior
 
     public function it_should_create_payment_result_info()
     {
-        $request = new ServerRequest(
-            'POST',
-            'any uri'
-        );
-
+        $request = new ServerRequest('POST', 'any uri');
         $parsedBody = [
             'authorizationcode' => '85963',
             'cardcountry' => 'ITALY',
