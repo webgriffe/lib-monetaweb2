@@ -45,4 +45,10 @@ class PaymentResultInfoSpec extends ObjectBehavior
         $this->isAuthorizationOnly()->shouldReturn(false);
         $this->isAuthorizationCaptured()->shouldReturn(false);
     }
+
+    public function it_should_has_error()
+    {
+        $this->setErrorCode('GV00004');
+        $this->isError()->shouldReturn(true);
+    }
 }

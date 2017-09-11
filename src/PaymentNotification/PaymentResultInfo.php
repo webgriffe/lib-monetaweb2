@@ -16,11 +16,14 @@ class PaymentResultInfo
     private $customField;
     private $maskedPan;
     private $merchantOrderId;
+    private $paymentId;
     private $responseCode;
     private $result;
     private $retrievalReferenceNumber;
     private $securityToken;
     private $threeDSecure;
+    private $errorCode;
+    private $errorMessage;
 
     public function isAuthorizationOnly()
     {
@@ -40,6 +43,11 @@ class PaymentResultInfo
     public function isSuccessful()
     {
         return $this->responseCode === self::SUCCESSFUL_RESPONSE_CODE;
+    }
+
+    public function isError()
+    {
+        return $this->errorCode !== null;
     }
 
     /**
@@ -157,6 +165,22 @@ class PaymentResultInfo
     /**
      * @return mixed
      */
+    public function getPaymentId()
+    {
+        return $this->paymentId;
+    }
+
+    /**
+     * @param mixed $paymentId
+     */
+    public function setPaymentId($paymentId)
+    {
+        $this->paymentId = $paymentId;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getResponseCode()
     {
         return $this->responseCode;
@@ -232,5 +256,37 @@ class PaymentResultInfo
     public function setThreeDSecure($threeDSecure)
     {
         $this->threeDSecure = $threeDSecure;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getErrorCode()
+    {
+        return $this->errorCode;
+    }
+
+    /**
+     * @param mixed $errorCode
+     */
+    public function setErrorCode($errorCode)
+    {
+        $this->errorCode = $errorCode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getErrorMessage()
+    {
+        return $this->errorMessage;
+    }
+
+    /**
+     * @param mixed $errorMessage
+     */
+    public function setErrorMessage($errorMessage)
+    {
+        $this->errorMessage = $errorMessage;
     }
 }
