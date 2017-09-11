@@ -19,8 +19,9 @@ class UrlGenerator
         $this->logger = $logger;
     }
 
+    /** @noinspection MoreThanThreeArgumentsInspection */
     public function generate(
-        $baseUrl,
+        $gatewayBaseUrl,
         $terminalId,
         $terminalPassword,
         $amount,
@@ -35,7 +36,7 @@ class UrlGenerator
         $customField = null
     ) {
 
-        if (empty($baseUrl) || empty($terminalId) || empty($terminalPassword) || $amount === null) {
+        if (empty($gatewayBaseUrl) || empty($terminalId) || empty($terminalPassword) || $amount === null) {
             throw new InvalidArgumentException('Base Url, Terminal ID, Terminal Password and Amount ere required');
         }
 
@@ -73,7 +74,7 @@ class UrlGenerator
             'cardHolderEmail' => $cardholderEmail,
             'customField' => $customField,
         ];
-        $generatedUrl = $baseUrl . '?' . http_build_query($params);
+        $generatedUrl = $gatewayBaseUrl . '?' . http_build_query($params);
         $this->debug('Generated URL is: ' . $generatedUrl);
         return $generatedUrl;
     }
