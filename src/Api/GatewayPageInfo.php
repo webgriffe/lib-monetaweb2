@@ -7,17 +7,20 @@ class GatewayPageInfo
 
     private $hostedPageUrl;
     private $securityToken;
+    private $paymentId;
 
     /**
      * GatewayPageInfo constructor.
      * @param $hostedPageUrl
      * @param $securityToken
+     * @param $paymentId
      */
-    public function __construct($hostedPageUrl, $securityToken)
+    public function __construct($hostedPageUrl, $securityToken, $paymentId)
     {
 
         $this->hostedPageUrl = $hostedPageUrl;
         $this->securityToken = $securityToken;
+        $this->paymentId = $paymentId;
     }
 
     /**
@@ -34,5 +37,13 @@ class GatewayPageInfo
     public function getSecurityToken()
     {
         return $this->securityToken;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentId()
+    {
+        return $this->paymentId;
     }
 }

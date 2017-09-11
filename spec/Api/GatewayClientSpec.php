@@ -46,7 +46,8 @@ XML;
             ->shouldBeLike(
                 new GatewayPageInfo(
                     'https://www.monetaonline.it/monetaweb?paymentid=123456789012345678',
-                    '80957febda6a467c82d34da0e0673a6e'
+                    '80957febda6a467c82d34da0e0673a6e',
+                    '123456789012345678'
                 )
             );
     }

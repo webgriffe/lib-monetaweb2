@@ -92,7 +92,7 @@ class GatewayClient
         $securityToken = (string)$parsedResponseBody->securitytoken;
         $hostedPageUrl .= (parse_url($hostedPageUrl, PHP_URL_QUERY) ? '&' : '?') . 'paymentid=' . $paymentId;
 
-        return new GatewayPageInfo($hostedPageUrl, $securityToken);
+        return new GatewayPageInfo($hostedPageUrl, $securityToken, $paymentId);
     }
 
     /**
