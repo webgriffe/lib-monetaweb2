@@ -24,6 +24,8 @@ class Mapper
             return $paymentError;
         }
 
+        $this->checkRequiredParameters($requestBody);
+
         $paymentResultInfo = new Result\PaymentResultInfo(
             $this->coalesceOperator('authorizationcode', $requestBody),
             $this->coalesceOperator('cardcountry', $requestBody),
@@ -51,5 +53,18 @@ class Mapper
     private function coalesceOperator($key, $data)
     {
         return isset($data[$key]) ? $data[$key] : null;
+    }
+
+    /**
+     * @param array $requestBody
+     * @throws \InvalidArgumentException
+     */
+    private function checkRequiredParameters($requestBody)
+    {
+        if (!isset($requestBody['paymentid'], $requestBody['result'], $requestBody['threedsecure'])) {
+            throw new \InvalidArgumentException(
+                'One or more required parameters are missing: paymentid, result and threedsecure'
+            );
+        }
     }
 }

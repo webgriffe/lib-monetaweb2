@@ -79,4 +79,17 @@ class MapperSpec extends ObjectBehavior
         );
         $this->map($request)->shouldBeLike($expectedPaymentResult);
     }
+
+    public function it_should_throw_exception_when_required_fields_are_missing()
+    {
+        $request = new ServerRequest('POST', 'any uri');
+        $this->shouldThrow(\InvalidArgumentException::class)->duringMap($request->withParsedBody([]));
+        $this->shouldThrow(\InvalidArgumentException::class)->duringMap($request->withParsedBody(['paymentid' => '1']));
+        $this->shouldThrow(\InvalidArgumentException::class)->duringMap(
+            $request->withParsedBody(['paymentid' => '1', 'result' => '000'])
+        );
+        $this->shouldThrow(\InvalidArgumentException::class)->duringMap(
+            $request->withParsedBody(['threedsecure' => '1', 'result' => '000'])
+        );
+    }
 }
