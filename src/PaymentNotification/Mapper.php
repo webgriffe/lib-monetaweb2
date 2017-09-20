@@ -25,21 +25,31 @@ class Mapper
         }
 
         $paymentResultInfo = new Result\PaymentResultInfo(
-            $requestBody['authorizationcode'],
-            $requestBody['cardcountry'],
-            $requestBody['cardexpirydate'],
-            $requestBody['cardtype'],
-            $requestBody['customfield'],
-            $requestBody['maskedpan'],
-            $requestBody['merchantorderid'],
+            $this->coalesceOperator('authorizationcode', $requestBody),
+            $this->coalesceOperator('cardcountry', $requestBody),
+            $this->coalesceOperator('cardexpirydate', $requestBody),
+            $this->coalesceOperator('cardtype', $requestBody),
+            $this->coalesceOperator('customfield', $requestBody),
+            $this->coalesceOperator('maskedpan', $requestBody),
+            $this->coalesceOperator('merchantorderid', $requestBody),
             $requestBody['paymentid'],
-            $requestBody['responsecode'],
+            $this->coalesceOperator('responsecode', $requestBody),
             $requestBody['result'],
-            $requestBody['rrn'],
-            $requestBody['securitytoken'],
+            $this->coalesceOperator('rrn', $requestBody),
+            $this->coalesceOperator('securitytoken', $requestBody),
             $requestBody['threedsecure']
         );
 
         return $paymentResultInfo;
+    }
+
+    /**
+     * @param string $key
+     * @param array $data
+     * @return mixed|null
+     */
+    private function coalesceOperator($key, $data)
+    {
+        return isset($data[$key]) ? $data[$key] : null;
     }
 }

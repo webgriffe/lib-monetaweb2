@@ -14,7 +14,7 @@ class MapperSpec extends ObjectBehavior
         $this->shouldHaveType(Mapper::class);
     }
 
-    public function it_should_create_payment_result_info()
+    public function it_should_create_payment_result_info_with_approved_transaction()
     {
         $request = new ServerRequest('POST', 'any uri');
         $parsedBody = [
@@ -47,6 +47,34 @@ class MapperSpec extends ObjectBehavior
             'APPROVED',
             '123456789012',
             '80957febda6a467c82d34da0e0673a6e',
+            'S'
+        );
+        $this->map($request)->shouldBeLike($expectedPaymentResult);
+    }
+
+    public function it_should_create_payment_result_info_with_canceled_transaction()
+    {
+        $request = new ServerRequest('POST', 'any uri');
+        $parsedBody = [
+            'paymentid' => '123456789012345678',
+            'result' => PaymentResultInfo::TRANSACTION_CANCELED_CODE,
+            'threedsecure' => 'S'
+        ];
+        $request = $request->withParsedBody($parsedBody);
+
+        $expectedPaymentResult = new PaymentResultInfo(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            '123456789012345678',
+            null,
+            PaymentResultInfo::TRANSACTION_CANCELED_CODE,
+            null,
+            null,
             'S'
         );
         $this->map($request)->shouldBeLike($expectedPaymentResult);
