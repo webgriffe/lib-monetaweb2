@@ -4,6 +4,7 @@ namespace Webgriffe\LibMonetaWebDue\PaymentInit;
 
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Respect\Validation\Validator;
 
 class UrlGenerator
@@ -36,6 +37,7 @@ class UrlGenerator
      * @param string|null $customField
      * @return string
      * @throws \Psr\Log\InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function generate(
         $gatewayBaseUrl,
@@ -52,12 +54,17 @@ class UrlGenerator
         $cardholderEmail = null,
         $customField = null
     ) {
+        $this->log('Generating payment initialization url');
         if (empty($gatewayBaseUrl) || empty($terminalId) || empty($terminalPassword) || $amount === null) {
-            throw new InvalidArgumentException('Base Url, Terminal ID, Terminal Password and Amount are required');
+            $message = 'Base Url, Terminal ID, Terminal Password and Amount are required';
+            $this->log($message, LogLevel::CRITICAL);
+            throw new InvalidArgumentException($message);
         }
 
         if ((float)$amount === 0.0) {
-            throw new InvalidArgumentException('Amount should be greater than zero');
+            $message = 'Amount should be greater than zero';
+            $this->log($message, LogLevel::CRITICAL);
+            throw new InvalidArgumentException($message);
         }
 
         try {
@@ -72,6 +79,7 @@ class UrlGenerator
             Validator::optional(Validator::length(null, 125))->assert($cardholderEmail);
             Validator::optional(Validator::length(null, 255))->assert($customField);
         } catch (\Exception $e) {
+            $this->log($e->getMessage(), LogLevel::CRITICAL);
             throw new InvalidArgumentException($e->getMessage());
         }
 
@@ -91,11 +99,15 @@ class UrlGenerator
             'customField' => $customField,
         ];
         $generatedUrl = $gatewayBaseUrl . '?' . http_build_query($params);
-        $this->debug('Generated URL is: ' . $generatedUrl);
+        $this->log('Generated URL is: ' . $generatedUrl);
         return $generatedUrl;
     }
 
-
+    /**
+     * @param string $currencyCode
+     * @return mixed
+     * @throws \InvalidArgumentException
+     */
     private function getCurrencyNumericCode($currencyCode)
     {
         $map = array(
@@ -149,12 +161,12 @@ class UrlGenerator
             'ZAR' => '710',
         );
         if (!array_key_exists($currencyCode, $map)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Cannot get the numeric code for currency "%s", is not one of the supported currencies.',
-                    $currencyCode
-                )
+            $message = sprintf(
+                'Cannot get the numeric code for currency "%s", it is not one of the supported currencies.',
+                $currencyCode
             );
+            $this->log($message, LogLevel::CRITICAL);
+            throw new \InvalidArgumentException($message);
         }
         return $map[$currencyCode];
     }
@@ -169,13 +181,10 @@ class UrlGenerator
         return $language;
     }
 
-    /**
-     * @param $message
-     */
-    private function debug($message)
+    private function log($message, $level = LogLevel::DEBUG)
     {
         if ($this->logger) {
-            $this->logger->debug($message);
+            $this->logger->log($level, '[Lib MonetaWeb2]: ' . $message);
         }
     }
 }
