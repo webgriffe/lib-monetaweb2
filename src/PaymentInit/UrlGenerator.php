@@ -6,6 +6,7 @@ use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Respect\Validation\Validator;
+use Webgriffe\LibMonetaWebDue\Lists\Currencies;
 
 class UrlGenerator
 {
@@ -110,57 +111,9 @@ class UrlGenerator
      */
     private function getCurrencyNumericCode($currencyCode)
     {
-        $map = array(
-            'AED' => '784',
-            'AOA' => '973',
-            'ARS' => '032',
-            'AUD' => '036',
-            'AZN' => '944',
-            'BGN' => '975',
-            'BHD' => '048',
-            'BRL' => '986',
-            'BYR' => '974',
-            'CAD' => '124',
-            'CHF' => '756',
-            'CLP' => '152',
-            'CNY' => '156',
-            'COP' => '170',
-            'CZK' => '203',
-            'DKK' => '208',
-            'EGP' => '818',
-            'EUR' => '978',
-            'GBP' => '826',
-            'HKD' => '344',
-            'HRK' => '191',
-            'HUF' => '348',
-            'INR' => '356',
-            'JOD' => '400',
-            'JPY' => '392',
-            'KRW' => '410',
-            'KWD' => '414',
-            'KZT' => '398',
-            'MXN' => '484',
-            'MYR' => '458',
-            'NGN' => '566',
-            'NOK' => '578',
-            'PHP' => '608',
-            'PLN' => '985',
-            'QAR' => '634',
-            'RON' => '946',
-            'RSD' => '941',
-            'RUB' => '643',
-            'SAR' => '682',
-            'SEK' => '752',
-            'SGD' => '702',
-            'THB' => '764',
-            'TRY' => '949',
-            'TWD' => '901',
-            'USD' => '840',
-            'VEF' => '937',
-            'VND' => '704',
-            'ZAR' => '710',
-        );
-        if (!array_key_exists($currencyCode, $map)) {
+        $currencies = new Currencies();
+        $currenciesList = $currencies->getList();
+        if (!array_key_exists($currencyCode, $currenciesList)) {
             $message = sprintf(
                 'Cannot get the numeric code for currency "%s", it is not one of the supported currencies.',
                 $currencyCode
@@ -168,7 +121,7 @@ class UrlGenerator
             $this->log($message, LogLevel::CRITICAL);
             throw new \InvalidArgumentException($message);
         }
-        return $map[$currencyCode];
+        return $currenciesList[$currencyCode];
     }
 
     private function validateLanguage($language)
