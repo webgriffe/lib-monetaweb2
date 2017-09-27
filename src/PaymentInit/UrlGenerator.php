@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Respect\Validation\Validator;
 use Webgriffe\LibMonetaWebDue\Lists\Currencies;
+use Webgriffe\LibMonetaWebDue\Lists\Languages;
 
 class UrlGenerator
 {
@@ -126,10 +127,9 @@ class UrlGenerator
 
     private function validateLanguage($language)
     {
-        $allowedLanguages = ['DEU', 'FRA', 'ITA', 'POR', 'RUS', 'SPA', 'USA'];
-
-        if (!in_array($language, $allowedLanguages, true)) {
-            return 'USA';
+        $languages = new Languages();
+        if (!in_array($language, $languages->getList(), true)) {
+            return Languages::USA_LANGUAGE_CODE;
         }
         return $language;
     }
