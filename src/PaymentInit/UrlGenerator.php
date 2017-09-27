@@ -20,6 +20,23 @@ class UrlGenerator
     }
 
     /** @noinspection MoreThanThreeArgumentsInspection */
+    /**
+     * @param string $gatewayBaseUrl
+     * @param string $terminalId
+     * @param string $terminalPassword
+     * @param float $amount
+     * @param string $currencyCode
+     * @param string $language
+     * @param string $responseToMerchantUrl
+     * @param string|null $recoveryUrl
+     * @param string $orderId
+     * @param string|null $paymentDescription
+     * @param string|null $cardHolderName
+     * @param string|null $cardholderEmail
+     * @param string|null $customField
+     * @return string
+     * @throws \Psr\Log\InvalidArgumentException
+     */
     public function generate(
         $gatewayBaseUrl,
         $terminalId,
@@ -35,13 +52,12 @@ class UrlGenerator
         $cardholderEmail = null,
         $customField = null
     ) {
-
         if (empty($gatewayBaseUrl) || empty($terminalId) || empty($terminalPassword) || $amount === null) {
-            throw new InvalidArgumentException('Base Url, Terminal ID, Terminal Password and Amount ere required');
+            throw new InvalidArgumentException('Base Url, Terminal ID, Terminal Password and Amount are required');
         }
 
-        if ($amount === 0) {
-            throw new InvalidArgumentException('Amount should be grater than zero');
+        if ((float)$amount === 0.0) {
+            throw new InvalidArgumentException('Amount should be greater than zero');
         }
 
         try {

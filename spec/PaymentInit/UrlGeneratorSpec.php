@@ -124,7 +124,6 @@ class UrlGeneratorSpec extends ObjectBehavior
             '&customField=campoPersonalizzabile';
 
         $this->beConstructedWith($logger);
-        $logger->debug('Generated URL is: '.$generatedUrl)->shouldBeCalled();
         $this->generate(
             'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
             '99999999',
@@ -191,12 +190,38 @@ class UrlGeneratorSpec extends ObjectBehavior
                 'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
                 '99999999',
                 '99999999',
-                0,
+                0.0,
                 null,
                 'ITA',
                 'http://www.merchant.it/notify.jsp',
                 null,
                 'TRCK0001'
+            );
+    }
+
+    public function it_generates_correct_url_even_with_amount_is_close_to_zero()
+    {
+        $this
+            ->generate(
+                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                '99999999',
+                '99999999',
+                0.01,
+                null,
+                'ITA',
+                'http://www.merchant.it/notify.jsp',
+                null,
+                'TRCK0001'
+            )
+            ->shouldReturn(
+                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet' .
+                '?id=99999999' .
+                '&password=99999999' .
+                '&operationType=initialize' .
+                '&amount=0.01' .
+                '&language=ITA' .
+                '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
+                '&merchantOrderId=TRCK0001'
             );
     }
 
