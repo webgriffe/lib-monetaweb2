@@ -5,6 +5,8 @@ namespace Webgriffe\LibMonetaWebDue\Api;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Mapper;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInfo;
@@ -12,12 +14,19 @@ use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInterface;
 
 class GatewayClient
 {
-    /** @var ClientInterface $client */
+    /**
+     * @var ClientInterface $client
+     */
     private $client;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
-    public function __construct(ClientInterface $client)
+    public function __construct(ClientInterface $client, LoggerInterface $logger = null)
     {
         $this->client = $client;
+        $this->logger = $logger;
     }
 
     /** @noinspection MoreThanThreeArgumentsInspection */
@@ -54,6 +63,7 @@ class GatewayClient
         $cardholderEmail = null,
         $customField = null
     ) {
+        $this->log('Get payment page info method called');
         $urlGenerator = new UrlGenerator();
         $paymentInitUrl = $urlGenerator->generate(
             $gatewayBaseUrl,
@@ -72,19 +82,21 @@ class GatewayClient
         );
 
         $request = new Request('POST', $paymentInitUrl);
+        $this->log(sprintf('Doing a request with the following data: %s', PHP_EOL . print_r($request, true)));
         $response = $this->client->send($request);
+        $this->log(sprintf('The request returned the following response: %s', PHP_EOL . print_r($response, true)));
 
+        // todo: handle xml parsing errors
         $parsedResponseBody = simplexml_load_string($response->getBody());
-        // todo: log request and response
         // todo: it could throw a custom exception that encapsulate the error code and message
         if (isset($parsedResponseBody->errorcode) || isset($parsedResponseBody->errormessage)) {
-            throw new \RuntimeException(
-                sprintf(
-                    'The request sent to MonetaWebDue gateway generated an error with code "%s" and message: %s',
-                    $parsedResponseBody->errorCode,
-                    $parsedResponseBody->errorMessage
-                )
+            $message = sprintf(
+                'The request sent to MonetaWebDue gateway generated an error with code "%s" and message: %s',
+                $parsedResponseBody->errorCode,
+                $parsedResponseBody->errorMessage
             );
+            $this->log($message, LogLevel::ERROR);
+            throw new \RuntimeException($message);
         }
 
         $hostedPageUrl = (string)$parsedResponseBody->hostedpageurl;
@@ -92,7 +104,14 @@ class GatewayClient
         $securityToken = (string)$parsedResponseBody->securitytoken;
         $hostedPageUrl .= (parse_url($hostedPageUrl, PHP_URL_QUERY) ? '&' : '?') . 'paymentid=' . $paymentId;
 
-        return new GatewayPageInfo($hostedPageUrl, $securityToken, $paymentId);
+        $gatewayPageInfo = new GatewayPageInfo($hostedPageUrl, $securityToken, $paymentId);
+        $this->log(
+            sprintf(
+                'Generated a GatewayPageInfo object with the following data: %s',
+                PHP_EOL . print_r($gatewayPageInfo, true)
+            )
+        );
+        return $gatewayPageInfo;
     }
 
     /**
@@ -116,5 +135,12 @@ class GatewayClient
             return hash_equals($storedSecurityToken, $paymentResult->getSecurityToken());
         }
         return strcmp($storedSecurityToken, $paymentResult->getSecurityToken()) === 0;
+    }
+
+    private function log($message, $level = LogLevel::DEBUG)
+    {
+        if ($this->logger) {
+            $this->logger->log($level, '[Lib MonetaWeb2]: ' . $message);
+        }
     }
 }
