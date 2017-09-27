@@ -45,6 +45,8 @@ class GatewayClient
      * @param string|null $cardholderEmail
      * @param string|null $customField
      * @return GatewayPageInfo
+     * @throws \Psr\Log\InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \RuntimeException
      */
@@ -117,10 +119,12 @@ class GatewayClient
     /**
      * @param ServerRequestInterface $request
      * @return PaymentResultInterface
+     * @throws \InvalidArgumentException
      */
     public function handleNotify(ServerRequestInterface $request)
     {
-        $mapper = new Mapper();
+        $this->log('Handle notify method called');
+        $mapper = new Mapper($this->logger);
         return $mapper->map($request);
     }
 
