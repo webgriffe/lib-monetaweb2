@@ -1,5 +1,6 @@
 {
     "name": "webgriffe/lib-monetaweb2",
+    "license": "MIT",
     "description": "Webgriffe Setefi MonetaWeb 2.0 PHP library",
     "authors": [
         {
