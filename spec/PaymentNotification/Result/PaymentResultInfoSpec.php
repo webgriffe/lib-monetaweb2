@@ -7,7 +7,7 @@ use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInfo;
 
 class PaymentResultInfoSpec extends ObjectBehavior
 {
-    public function it_should_be_successful_and_authorized_only()
+    public function it_should_be_successful_and_authorized()
     {
         $this->beConstructedWith(
             '85963',
@@ -19,14 +19,14 @@ class PaymentResultInfoSpec extends ObjectBehavior
             'TRCK0001',
             '123456789012345678',
             PaymentResultInfo::SUCCESSFUL_RESPONSE_CODE,
-            PaymentResultInfo::TRANSACTION_AUTHORIZED_CODE,
+            PaymentResultInfo::TRANSACTION_APPROVED_CODE,
             '123456789012',
             '80957febda6a467c82d34da0e0673a6e',
             'S'
         );
         $this->isSuccessful()->shouldReturn(true);
-        $this->isAuthorizationOnly()->shouldReturn(true);
-        $this->isAuthorizationCaptured()->shouldReturn(false);
+        $this->isApproved()->shouldReturn(true);
+        $this->isCapturedOnly()->shouldReturn(false);
     }
 
     public function it_should_be_not_successful()
@@ -41,12 +41,14 @@ class PaymentResultInfoSpec extends ObjectBehavior
             'TRCK0001',
             '123456789012345678',
             '020',
-            PaymentResultInfo::TRANSACTION_AUTHORIZED_CODE,
+            PaymentResultInfo::TRANSACTION_NOT_APPROVED_CODE,
             '123456789012',
             '80957febda6a467c82d34da0e0673a6e',
             'S'
         );
         $this->isSuccessful()->shouldReturn(false);
+        $this->isApproved()->shouldReturn(false);
+        $this->isCapturedOnly()->shouldReturn(false);
     }
 
     public function it_should_be_captured()
@@ -66,8 +68,9 @@ class PaymentResultInfoSpec extends ObjectBehavior
             '80957febda6a467c82d34da0e0673a6e',
             'S'
         );
-        $this->isAuthorizationCaptured()->shouldReturn(true);
-        $this->isAuthorizationOnly()->shouldReturn(false);
+        $this->isCanceled()->shouldReturn(false);
+        $this->isApproved()->shouldReturn(false);
+        $this->isCapturedOnly()->shouldReturn(true);
     }
 
     public function it_should_be_canceled()
@@ -88,7 +91,7 @@ class PaymentResultInfoSpec extends ObjectBehavior
             'S'
         );
         $this->isCanceled()->shouldReturn(true);
-        $this->isAuthorizationOnly()->shouldReturn(false);
-        $this->isAuthorizationCaptured()->shouldReturn(false);
+        $this->isApproved()->shouldReturn(false);
+        $this->isCapturedOnly()->shouldReturn(false);
     }
 }

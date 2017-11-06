@@ -37,7 +37,7 @@ class GeneratorFactorySpec extends ObjectBehavior
             'TRCK0001',
             '123456789012345678',
             $responseCode,
-            PaymentResultInfo::TRANSACTION_AUTHORIZED_CODE,
+            PaymentResultInfo::TRANSACTION_APPROVED_CODE,
             '123456789012',
             '80957febda6a467c82d34da0e0673a6e',
             'S'

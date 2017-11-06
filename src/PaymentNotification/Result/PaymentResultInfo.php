@@ -5,9 +5,11 @@ namespace Webgriffe\LibMonetaWebDue\PaymentNotification\Result;
 class PaymentResultInfo implements PaymentResultInterface
 {
     const SUCCESSFUL_RESPONSE_CODE = '000';
-    const TRANSACTION_AUTHORIZED_CODE = 'APPROVED';
-    const TRANSACTION_CAPTURED_CODE = 'CAPTURED';
-    const TRANSACTION_CANCELED_CODE = 'CANCELED';
+
+    const TRANSACTION_APPROVED_CODE     = 'APPROVED';
+    const TRANSACTION_NOT_APPROVED_CODE = 'NOT APPROVED';
+    const TRANSACTION_CAPTURED_CODE     = 'CAPTURED';
+    const TRANSACTION_CANCELED_CODE     = 'CANCELED';
 
     private $authorizationCode;
     private $cardCountry;
@@ -69,12 +71,24 @@ class PaymentResultInfo implements PaymentResultInterface
         $this->threeDSecure = $threeDSecure;
     }
 
-    public function isAuthorizationOnly()
+    /**
+     * This returns true for both authorize-only payment and immediate capture payments. Does NOT return true for
+     * capture-only operations, where the isCapturedOnly() method returns true.
+     *
+     * @return bool
+     */
+    public function isApproved()
     {
-        return $this->result === self::TRANSACTION_AUTHORIZED_CODE;
+        return $this->result === self::TRANSACTION_APPROVED_CODE;
     }
 
-    public function isAuthorizationCaptured()
+    /**
+     * This only returns true when capturing an amount that was authorized previously. This will NOT return true in case
+     * of an immediate capture payment.
+     *
+     * @return bool
+     */
+    public function isCapturedOnly()
     {
         return $this->result === self::TRANSACTION_CAPTURED_CODE;
     }
