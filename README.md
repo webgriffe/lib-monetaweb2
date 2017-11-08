@@ -64,7 +64,7 @@ The properties of this object are mapped 1to1 with the successful notify respons
 Even the properties of this object are mapped 1to1 with the parameters of the "faulty notify response", so refer to the payment gateway's integration documentation for more details about them.
 
 The Security Token is a value that is comunicated by Setefi both in the payment initialization response and the server to server notification. You should compare them to be ensure the integrity of the payment.
-In order to do this there the .. has a method called `verifySecurityToken` that accepts the initialization's security token and the payment result info (returned by the handle notify) as parameters and returns a boolean.
+In order to do this, the `GatewayClient` class has a method called `verifySecurityToken` that accepts the initialization's security token and the payment result info (returned by the handle notify) as parameters and returns a boolean:
 
     $gatewayClient = new Webgriffe\LibMonetaWebDue\Api\GatewayClient();
     ...
