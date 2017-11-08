@@ -21,7 +21,7 @@ Usage
 
 ### Payment initialization
 
-You can generate a payment initialization URL using the `GatewayClient`:
+You can generate a payment initialization URL using the `GatewayClient` class:
 
     $gatewayClient = new Webgriffe\LibMonetaWebDue\Api\GatewayClient();
 	$getPaymentPageInfo = $gatewayClient->getPaymentPageInfo(
@@ -50,16 +50,46 @@ The `getPaymentPageInfo` method returns a `GatewayPageInfo` value object that en
 Once that you redirected the user to the `Hosted Page URL` a server-to-server notification will be perfomed by MonetaWebDue to one of the 2 urls that you specified when you called `getPaymentPageInfo`.
 In the example of the payment initialization the user will be redirected to `http://www.merchant.it/notify/` in case of successful operation and to `http://www.merchant.it/error/` otherwise.
 
-You can handle this request by using the `handleNotify` method of the `GatewayClient`:
+You can handle this request by using the `handleNotify` method of the `GatewayClient` class:
 
+    $gatewayClient = new Webgriffe\LibMonetaWebDue\Api\GatewayClient();
+    ...
     // $psrRequest must be an instance of an object that implements the \Psr\Http\Message\RequestInterface
 	$paymentResult = $gatewayClient->handleNotify($psrRequest);
     
-The result of the `handleNotify` method could be a `PaymentResultInfo` object or a `PaymentResultErrorInfo` in case of error during the notification.
+The result of the `handleNotify` method could be a `PaymentResultInfo` object or a `PaymentResultErrorInfo`:
+* The former object is returned when the notify request comunicates that the payment was handled successfully (this does not means that the payment was successful!).
+The properties of this object are mapped 1to1 with the successful notify response parameters, so refer to the payment gateway's integration documentation for more details about them. 
+* Instead, the latter object is returned when the notify request comunicates an error. This means that something went unexpectedly wrong during the payment. This has nothing to do with, for example, a "canceled" order: cases like this are not unexpected and so they generates a PaymentResultInfo object (as explained above).
+Even the properties of this object are mapped 1to1 with the parameters of the "faulty notify response", so refer to the payment gateway's integration documentation for more details about them.
 
-TODO: explain the two objects
+The Security Token is a value that is comunicated by Setefi both in the payment initialization response and the server to server notification. You should compare them to be ensure the integrity of the payment.
+In order to do this there the .. has a method called `verifySecurityToken` that accepts the initialization's security token and the payment result info (returned by the handle notify) as parameters and returns a boolean.
 
-TODO: explain the verify security token
+    $gatewayClient = new Webgriffe\LibMonetaWebDue\Api\GatewayClient();
+    ...
+	$match = $gatewayClient->verifySecurityToken($storedSecurityToken, $paymentResult);
+
+So an example of a real implementation for the server to server notification could be this:
+
+    $gatewayClient = new Webgriffe\LibMonetaWebDue\Api\GatewayClient();
+    ...
+	$paymentResult = $gatewayClient->handleNotify($psrRequest);
+    if ($paymentResult instanceof PaymentResultErrorInfo) {
+        ..
+    } else {
+        /** @var PaymentResultInfo $paymentResult */
+        if (!$paymentResult->isCanceled()) { // the security token is not returned if the payment was canceled
+            if (!$gatewayClient->verifySecurityToken($storedSecurityToken, $paymentResult)) {
+                // error
+                ..
+            }
+        }
+        ..
+    }
+
+### 
+
 
 Contributing
 ------------
