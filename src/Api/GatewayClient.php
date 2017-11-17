@@ -124,6 +124,10 @@ class GatewayClient
     }
 
     /**
+     * This call extracts the payment id from the server to server call. This is useful to retrieve some data from the
+     * local database in order to properly process the server to server message. For example this allows one to retrieve
+     * the payment type and know whether the payment was a normal payment or a MyBank payment.
+     *
      * @param ServerRequestInterface $request
      *
      * @return string
@@ -136,7 +140,10 @@ class GatewayClient
         $requestBody = array_change_key_case($requestBody, CASE_LOWER);
 
         if (array_key_exists('paymentid', $requestBody)) {
-            return $requestBody['paymentid'];
+            $paymentid = $requestBody['paymentid'];
+            $this->log('getPaymentId returns '.$paymentid);
+
+            return $paymentid;
         }
 
         throw new \RuntimeException('Missing paymentid in server to server message');
@@ -144,12 +151,12 @@ class GatewayClient
 
     /**
      * @param ServerRequestInterface $request
-     * @param string $operationType The type of payment that this notify is about
-     *      (@see \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE and
-     *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE_MYBANK). In order to know
-     *      which value to provide here, please call the getPaymentId() method before calling this one, then retrieve
-     *      the payment information about the payment. Among these information you should have saved the operation type
-     *      that must be passed here.
+     * @param string $operationType The type of payment that this notify is dealing with. Possible values are
+     *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE and
+     *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE_MYBANK. In order to know
+     *      which value to pass here, please call the getPaymentId() method before calling this one, then retrieve
+     *      the payment information about the payment from your database. Among these information you should have saved
+     *      the operation type that must be passed here.
      *
      * @return PaymentResultInterface
      *
