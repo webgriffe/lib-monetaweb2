@@ -101,8 +101,6 @@ class UrlGenerator
             'password' => $terminalPassword,
             'operationType' => $operationType,
             'amount' => number_format($amount, 2, '.', ''),
-            'currencyCode' => $currencyCode ? $this->getCurrencyNumericCode($currencyCode) : null,
-            'language' => $this->validateLanguage($language),
             'responseToMerchantUrl' => $responseToMerchantUrl,
             'recoveryUrl' => $recoveryUrl,
             'merchantOrderId' => $orderId,
@@ -111,6 +109,12 @@ class UrlGenerator
             'cardHolderEmail' => $cardholderEmail,
             'customField' => $customField,
         ];
+
+        if ($operationType == self::OPERATION_TYPE_INITIALIZE) {
+            $params['currencyCode'] = $currencyCode ? $this->getCurrencyNumericCode($currencyCode) : null;
+            $params['language'] = $this->validateLanguage($language);
+        }
+
         $generatedUrl = $gatewayBaseUrl . '?' . http_build_query($params);
         $this->log('Generated URL is: ' . $generatedUrl);
         return $generatedUrl;

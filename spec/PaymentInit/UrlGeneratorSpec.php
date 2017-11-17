@@ -37,15 +37,15 @@ class UrlGeneratorSpec extends ObjectBehavior
                 '&password=99999999' .
                 '&operationType=initialize' .
                 '&amount=1428.70' .
-                '&currencyCode=978' .
-                '&language=ITA' .
                 '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
                 '&recoveryUrl=http%3A%2F%2Fwww.merchant.it%2Ferror.jsp' .
                 '&merchantOrderId=TRCK0001' .
                 '&description=Descrizione' .
                 '&cardHolderName=NomeCognome' .
                 '&cardHolderEmail=nome%40dominio.com' .
-                '&customField=campoPersonalizzabile'
+                '&customField=campoPersonalizzabile' .
+                '&currencyCode=978' .
+                '&language=ITA'
             );
     }
 
@@ -74,8 +74,6 @@ class UrlGeneratorSpec extends ObjectBehavior
                 '&password=99999999' .
                 '&operationType=initializemybank' .
                 '&amount=1428.70' .
-                '&currencyCode=978' .
-                '&language=ITA' .
                 '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
                 '&recoveryUrl=http%3A%2F%2Fwww.merchant.it%2Ferror.jsp' .
                 '&merchantOrderId=TRCK0001' .
@@ -131,15 +129,15 @@ class UrlGeneratorSpec extends ObjectBehavior
                 '&password=99999999' .
                 '&operationType=initialize' .
                 '&amount=1428.70' .
-                '&currencyCode=978' .
-                '&language=USA' .
                 '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
                 '&recoveryUrl=http%3A%2F%2Fwww.merchant.it%2Ferror.jsp' .
                 '&merchantOrderId=TRCK0001' .
                 '&description=Descrizione' .
                 '&cardHolderName=NomeCognome' .
                 '&cardHolderEmail=nome%40dominio.com' .
-                '&customField=campoPersonalizzabile'
+                '&customField=campoPersonalizzabile' .
+                '&currencyCode=978' .
+                '&language=USA'
             );
     }
 
@@ -150,15 +148,15 @@ class UrlGeneratorSpec extends ObjectBehavior
             '&password=99999999' .
             '&operationType=initialize' .
             '&amount=1428.70' .
-            '&currencyCode=978' .
-            '&language=ITA' .
             '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
             '&recoveryUrl=http%3A%2F%2Fwww.merchant.it%2Ferror.jsp' .
             '&merchantOrderId=TRCK0001' .
             '&description=Descrizione' .
             '&cardHolderName=NomeCognome' .
             '&cardHolderEmail=nome%40dominio.com' .
-            '&customField=campoPersonalizzabile';
+            '&customField=campoPersonalizzabile' .
+            '&currencyCode=978' .
+            '&language=ITA';
 
         $this->beConstructedWith($logger);
         $this->generate(
@@ -198,9 +196,9 @@ class UrlGeneratorSpec extends ObjectBehavior
                 '&password=99999999' .
                 '&operationType=initialize' .
                 '&amount=1428.70' .
-                '&language=ITA' .
                 '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
-                '&merchantOrderId=TRCK0001'
+                '&merchantOrderId=TRCK0001' .
+                '&language=ITA'
             );
     }
 
@@ -256,9 +254,9 @@ class UrlGeneratorSpec extends ObjectBehavior
                 '&password=99999999' .
                 '&operationType=initialize' .
                 '&amount=0.01' .
-                '&language=ITA' .
                 '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
-                '&merchantOrderId=TRCK0001'
+                '&merchantOrderId=TRCK0001' .
+                '&language=ITA'
             );
     }
 
