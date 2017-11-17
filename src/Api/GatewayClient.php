@@ -166,7 +166,7 @@ class GatewayClient
         ServerRequestInterface $request,
         $operationType = UrlGenerator::OPERATION_TYPE_INITIALIZE
     ) {
-        $this->log('Handle notify method called');
+        $this->log('Handle notify method called with operation type: '.$operationType);
         $mapper = new Mapper($this->logger);
         return $mapper->map($request, $operationType);
     }
