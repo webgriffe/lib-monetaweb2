@@ -39,7 +39,12 @@ class UrlGenerator
      * @param string|null $cardHolderName
      * @param string|null $cardholderEmail
      * @param string|null $customField
+     * @param string $operationType One of
+     *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE or
+     *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE_MYBANK
+     *
      * @return string
+     *
      * @throws \Psr\Log\InvalidArgumentException
      * @throws \InvalidArgumentException
      */

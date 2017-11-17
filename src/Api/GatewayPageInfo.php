@@ -4,7 +4,6 @@ namespace Webgriffe\LibMonetaWebDue\Api;
 
 class GatewayPageInfo
 {
-
     private $hostedPageUrl;
     private $securityToken;
     private $paymentId;
@@ -17,7 +16,6 @@ class GatewayPageInfo
      */
     public function __construct($hostedPageUrl, $securityToken, $paymentId)
     {
-
         $this->hostedPageUrl = $hostedPageUrl;
         $this->securityToken = $securityToken;
         $this->paymentId = $paymentId;

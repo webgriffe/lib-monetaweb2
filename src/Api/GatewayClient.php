@@ -44,7 +44,12 @@ class GatewayClient
      * @param string|null $cardHolderName
      * @param string|null $cardholderEmail
      * @param string|null $customField
+     * @param string $operationType One of
+     *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE or
+     *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE_MYBANK
+     *
      * @return GatewayPageInfo
+     *
      * @throws \Psr\Log\InvalidArgumentException
      * @throws \InvalidArgumentException
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -63,7 +68,8 @@ class GatewayClient
         $paymentDescription = null,
         $cardHolderName = null,
         $cardholderEmail = null,
-        $customField = null
+        $customField = null,
+        $operationType = UrlGenerator::OPERATION_TYPE_INITIALIZE
     ) {
         $this->log('Get payment page info method called');
         $urlGenerator = new UrlGenerator();
@@ -80,7 +86,8 @@ class GatewayClient
             $paymentDescription,
             $cardHolderName,
             $cardholderEmail,
-            $customField
+            $customField,
+            $operationType
         );
 
         $request = new Request('POST', $paymentInitUrl);
