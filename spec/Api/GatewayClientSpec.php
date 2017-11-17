@@ -9,6 +9,7 @@ use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use Webgriffe\LibMonetaWebDue\Api\GatewayClient;
 use Webgriffe\LibMonetaWebDue\Api\GatewayPageInfo;
+use GuzzleHttp\Psr7\ServerRequest;
 
 class GatewayClientSpec extends ObjectBehavior
 {
@@ -95,5 +96,34 @@ XML;
                 null,
                 'TRCK0001'
             );
+    }
+
+    public function it_should_return_payment_id_when_getPaymentId_is_called(ClientInterface $client)
+    {
+        $request = new ServerRequest('POST', 'any uri');
+        $parsedBody = [
+            'paymentid' => '123456789012345678',
+            'result' => 'AUTHORISED',
+            'description' => 'desc',
+            'authorizationcode' => '85963',
+            'merchantorderid' => 'TRCK0001',
+            'mybankid' => '9876543210',
+            'customfield' => 'some custom field',
+            'securitytoken' => '80957febda6a467c82d34da0e0673a6e',
+        ];
+        $request = $request->withParsedBody($parsedBody);
+
+        $this->beConstructedWith($client);
+        $this->getPaymentId($request)->shouldReturn('123456789012345678');
+    }
+
+    public function it_should_throw_exception_when_payment_id_is_missing(ClientInterface $client)
+    {
+        $request = new ServerRequest('POST', 'any uri');
+        $parsedBody = [];
+        $request = $request->withParsedBody($parsedBody);
+
+        $this->beConstructedWith($client);
+        $this->shouldThrow(\RuntimeException::class)->duringGetPaymentId($request);
     }
 }
