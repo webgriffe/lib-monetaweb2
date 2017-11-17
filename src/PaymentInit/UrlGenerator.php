@@ -12,6 +12,8 @@ use Webgriffe\LibMonetaWebDue\Lists\Languages;
 class UrlGenerator
 {
     const OPERATION_TYPE_INITIALIZE = 'initialize';
+    const OPERATION_TYPE_INITIALIZE_MYBANK = 'initializemybank';
+
     /**
      * @var LoggerInterface
      */
@@ -54,7 +56,8 @@ class UrlGenerator
         $paymentDescription = null,
         $cardHolderName = null,
         $cardholderEmail = null,
-        $customField = null
+        $customField = null,
+        $operationType = self::OPERATION_TYPE_INITIALIZE
     ) {
         $this->log('Generating payment initialization url');
         if (empty($gatewayBaseUrl) || empty($terminalId) || empty($terminalPassword) || $amount === null) {
@@ -69,6 +72,8 @@ class UrlGenerator
             throw new InvalidArgumentException($message);
         }
 
+        $validOperationTypes = array(self::OPERATION_TYPE_INITIALIZE, self::OPERATION_TYPE_INITIALIZE_MYBANK);
+
         try {
             Validator::stringType()->length(1, 8)->assert($terminalId);
             Validator::stringType()->length(1, 50)->assert($terminalPassword);
@@ -80,6 +85,7 @@ class UrlGenerator
             Validator::optional(Validator::length(null, 125))->assert($cardHolderName);
             Validator::optional(Validator::length(null, 125))->assert($cardholderEmail);
             Validator::optional(Validator::length(null, 255))->assert($customField);
+            Validator::in($validOperationTypes)->assert($operationType);
         } catch (\Exception $e) {
             $this->log($e->getMessage(), LogLevel::CRITICAL);
             throw new InvalidArgumentException($e->getMessage());
@@ -88,7 +94,7 @@ class UrlGenerator
         $params = [
             'id' => $terminalId,
             'password' => $terminalPassword,
-            'operationType' => self::OPERATION_TYPE_INITIALIZE,
+            'operationType' => $operationType,
             'amount' => number_format($amount, 2, '.', ''),
             'currencyCode' => $currencyCode ? $this->getCurrencyNumericCode($currencyCode) : null,
             'language' => $this->validateLanguage($language),
