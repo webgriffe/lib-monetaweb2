@@ -8,7 +8,7 @@
 
 namespace Webgriffe\LibMonetaWebDue\PaymentNotification\Result;
 
-class MyBankPaymentResultInfo implements PaymentResultInterface
+class MyBankPaymentResultInfo implements NonErrorPaymentResultInterface
 {
     const TRANSACTION_AUTHORISED_CODE   = 'AUTHORISED';
     const TRANSACTION_ERROR_CODE        = 'ERROR';
@@ -62,6 +62,14 @@ class MyBankPaymentResultInfo implements PaymentResultInterface
     public function getPaymentId()
     {
         return $this->paymentId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuccessful()
+    {
+        return $this->result === self::TRANSACTION_AUTHORISED_CODE;
     }
 
     /**

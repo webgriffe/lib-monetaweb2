@@ -2,7 +2,7 @@
 
 namespace Webgriffe\LibMonetaWebDue\PaymentNotification\Result;
 
-class PaymentResultInfo implements PaymentResultInterface
+class PaymentResultInfo implements NonErrorPaymentResultInterface
 {
     const SUCCESSFUL_RESPONSE_CODE = '000';
 
