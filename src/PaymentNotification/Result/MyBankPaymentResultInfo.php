@@ -73,6 +73,14 @@ class MyBankPaymentResultInfo implements NonErrorPaymentResultInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isCanceled()
+    {
+        return $this->result === self::TRANSACTION_CANCELED_CODE || $this->result == self::TRANSACTION_ABORTED_CODE;
+    }
+
+    /**
      * @return string
      */
     public function getResult()

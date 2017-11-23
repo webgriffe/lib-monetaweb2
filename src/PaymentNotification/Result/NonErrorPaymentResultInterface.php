@@ -11,9 +11,19 @@ namespace Webgriffe\LibMonetaWebDue\PaymentNotification\Result;
 interface NonErrorPaymentResultInterface extends PaymentResultInterface
 {
     /**
+     * Returns true if everything went well
+     *
      * @return bool
      */
     public function isSuccessful();
+
+    /**
+     * Returns true if the payment was aborted intentionally by the payer. Will not return true in case of technical
+     * problems.
+     *
+     * @return bool
+     */
+    public function isCanceled();
 
     /**
      * @return string
