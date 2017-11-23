@@ -10,9 +10,10 @@ class GatewayPageInfo
 
     /**
      * GatewayPageInfo constructor.
-     * @param $hostedPageUrl
-     * @param $securityToken
-     * @param $paymentId
+     *
+     * @param string $hostedPageUrl
+     * @param string $securityToken
+     * @param string $paymentId
      */
     public function __construct($hostedPageUrl, $securityToken, $paymentId)
     {
@@ -22,7 +23,7 @@ class GatewayPageInfo
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getHostedPageUrl()
     {
@@ -30,7 +31,7 @@ class GatewayPageInfo
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSecurityToken()
     {
@@ -38,7 +39,7 @@ class GatewayPageInfo
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPaymentId()
     {

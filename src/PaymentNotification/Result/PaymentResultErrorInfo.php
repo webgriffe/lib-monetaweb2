@@ -21,9 +21,10 @@ class PaymentResultErrorInfo implements PaymentResultInterface
 
     /**
      * PaymentResultErrorInfo constructor.
-     * @param $errorCode
-     * @param $errorMessage
-     * @param $paymentId
+     *
+     * @param string $errorCode
+     * @param string $errorMessage
+     * @param string $paymentId
      */
     public function __construct($errorCode, $errorMessage, $paymentId)
     {
@@ -49,7 +50,7 @@ class PaymentResultErrorInfo implements PaymentResultInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getPaymentId()
     {

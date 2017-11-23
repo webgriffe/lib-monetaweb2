@@ -27,19 +27,20 @@ class PaymentResultInfo implements PaymentResultInterface
 
     /**
      * PaymentResultInfo constructor.
-     * @param $authorizationCode
-     * @param $cardCountry
-     * @param $cardExpiryDate
-     * @param $cardType
-     * @param $customField
-     * @param $maskedPan
-     * @param $merchantOrderId
-     * @param $paymentId
-     * @param $responseCode
-     * @param $result
-     * @param $retrievalReferenceNumber
-     * @param $securityToken
-     * @param $threeDSecure
+     *
+     * @param string $authorizationCode
+     * @param string $cardCountry
+     * @param string $cardExpiryDate
+     * @param string $cardType
+     * @param string $customField
+     * @param string $maskedPan
+     * @param string $merchantOrderId
+     * @param string $paymentId
+     * @param string $responseCode
+     * @param string $result
+     * @param string $retrievalReferenceNumber
+     * @param string $securityToken
+     * @param string $threeDSecure
      */
     public function __construct(
         $authorizationCode,
@@ -93,18 +94,24 @@ class PaymentResultInfo implements PaymentResultInterface
         return $this->result === self::TRANSACTION_CAPTURED_CODE;
     }
 
+    /**
+     * @return bool
+     */
     public function isCanceled()
     {
         return $this->result === self::TRANSACTION_CANCELED_CODE;
     }
 
+    /**
+     * @return bool
+     */
     public function isSuccessful()
     {
         return $this->responseCode === self::SUCCESSFUL_RESPONSE_CODE;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getAuthorizationCode()
     {
@@ -112,7 +119,7 @@ class PaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCardCountry()
     {
@@ -120,7 +127,7 @@ class PaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCardExpiryDate()
     {
@@ -128,7 +135,7 @@ class PaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCardType()
     {
@@ -136,7 +143,7 @@ class PaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCustomField()
     {
@@ -144,7 +151,7 @@ class PaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getMaskedPan()
     {
@@ -152,7 +159,7 @@ class PaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getMerchantOrderId()
     {
@@ -160,7 +167,7 @@ class PaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getPaymentId()
     {
@@ -168,7 +175,7 @@ class PaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getResponseCode()
     {
@@ -176,7 +183,7 @@ class PaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getResult()
     {
@@ -184,7 +191,7 @@ class PaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getRetrievalReferenceNumber()
     {
@@ -192,7 +199,7 @@ class PaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSecurityToken()
     {
@@ -200,7 +207,7 @@ class PaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getThreeDSecure()
     {

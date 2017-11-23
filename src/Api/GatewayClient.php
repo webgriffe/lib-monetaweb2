@@ -18,11 +18,18 @@ class GatewayClient
      * @var ClientInterface $client
      */
     private $client;
+
     /**
      * @var LoggerInterface
      */
     private $logger;
 
+    /**
+     * GatewayClient constructor.
+     *
+     * @param ClientInterface $client
+     * @param LoggerInterface|null $logger
+     */
     public function __construct(ClientInterface $client, LoggerInterface $logger = null)
     {
         $this->client = $client;
@@ -72,6 +79,7 @@ class GatewayClient
         $operationType = UrlGenerator::OPERATION_TYPE_INITIALIZE
     ) {
         $this->log('Get payment page info method called');
+
         $urlGenerator = new UrlGenerator();
         $paymentInitUrl = $urlGenerator->generate(
             $gatewayBaseUrl,
@@ -120,6 +128,7 @@ class GatewayClient
                 PHP_EOL . print_r($gatewayPageInfo, true)
             )
         );
+
         return $gatewayPageInfo;
     }
 
@@ -181,6 +190,7 @@ class GatewayClient
         if (function_exists('hash_equals')) {
             return hash_equals($storedSecurityToken, $paymentResult->getSecurityToken());
         }
+
         return strcmp($storedSecurityToken, $paymentResult->getSecurityToken()) === 0;
     }
 

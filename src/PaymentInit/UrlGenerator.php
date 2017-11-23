@@ -11,8 +11,8 @@ use Webgriffe\LibMonetaWebDue\Lists\Languages;
 
 class UrlGenerator
 {
-    const OPERATION_TYPE_INITIALIZE = 'initialize';
-    const OPERATION_TYPE_INITIALIZE_MYBANK = 'initializemybank';
+    const OPERATION_TYPE_INITIALIZE         = 'initialize';
+    const OPERATION_TYPE_INITIALIZE_MYBANK  = 'initializemybank';
 
     /**
      * @var LoggerInterface
@@ -65,6 +65,7 @@ class UrlGenerator
         $operationType = self::OPERATION_TYPE_INITIALIZE
     ) {
         $this->log('Generating payment initialization url');
+
         if (empty($gatewayBaseUrl) || empty($terminalId) || empty($terminalPassword) || $amount === null) {
             $message = 'Base Url, Terminal ID, Terminal Password and Amount are required';
             $this->log($message, LogLevel::CRITICAL);

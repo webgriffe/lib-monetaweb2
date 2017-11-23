@@ -27,14 +27,14 @@ class MyBankPaymentResultInfo implements PaymentResultInterface
     /**
      * MyBankPaymentResultInfo constructor.
      *
-     * @param $paymentId
-     * @param $result
-     * @param $description
-     * @param $authorizationCode
-     * @param $merchantOrderId
-     * @param $myBankId
-     * @param $customField
-     * @param $securityToken
+     * @param string $paymentId
+     * @param string $result
+     * @param string $description
+     * @param string $authorizationCode
+     * @param string $merchantOrderId
+     * @param string $myBankId
+     * @param string $customField
+     * @param string $securityToken
      */
     public function __construct(
         $paymentId,
@@ -56,13 +56,16 @@ class MyBankPaymentResultInfo implements PaymentResultInterface
         $this->securityToken = $securityToken;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getPaymentId()
     {
         return $this->paymentId;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getResult()
     {
@@ -70,7 +73,7 @@ class MyBankPaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getDescription()
     {
@@ -78,7 +81,7 @@ class MyBankPaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getAuthorizationCode()
     {
@@ -86,7 +89,7 @@ class MyBankPaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getMerchantOrderId()
     {
@@ -94,7 +97,7 @@ class MyBankPaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getMyBankId()
     {
@@ -102,7 +105,7 @@ class MyBankPaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCustomField()
     {
@@ -110,7 +113,7 @@ class MyBankPaymentResultInfo implements PaymentResultInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSecurityToken()
     {

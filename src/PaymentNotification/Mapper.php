@@ -14,6 +14,11 @@ class Mapper
      */
     private $logger;
 
+    /**
+     * Mapper constructor.
+     *
+     * @param LoggerInterface|null $logger
+     */
     public function __construct(LoggerInterface $logger = null)
     {
         $this->logger = $logger;

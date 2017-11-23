@@ -11,6 +11,7 @@ class GeneratorFactory
      * @param PaymentResultInterface $result
      * @param string $successUrl
      * @param string $errorUrl
+     *
      * @return GeneratorInterface
      */
     public function getGenerator(PaymentResultInterface $result, $successUrl, $errorUrl)

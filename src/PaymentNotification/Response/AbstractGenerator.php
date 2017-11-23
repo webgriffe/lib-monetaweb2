@@ -25,5 +25,8 @@ abstract class AbstractGenerator implements GeneratorInterface
         $this->errorUrl = $errorUrl;
     }
 
+    /**
+     * @return string
+     */
     abstract public function generate();
 }
