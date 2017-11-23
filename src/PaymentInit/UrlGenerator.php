@@ -31,7 +31,7 @@ class UrlGenerator
      * @param string $terminalPassword
      * @param float $amount
      * @param string $currencyCode
-     * @param string $language
+     * @param string $languageCode
      * @param string $responseToMerchantUrl
      * @param string|null $recoveryUrl
      * @param string $orderId
@@ -54,7 +54,7 @@ class UrlGenerator
         $terminalPassword,
         $amount,
         $currencyCode,
-        $language,
+        $languageCode,
         $responseToMerchantUrl,
         $recoveryUrl,
         $orderId,
@@ -113,7 +113,7 @@ class UrlGenerator
 
         if ($operationType == self::OPERATION_TYPE_INITIALIZE) {
             $params['currencyCode'] = $currencyCode ? $this->getCurrencyNumericCode($currencyCode) : null;
-            $params['language'] = $this->validateLanguage($language);
+            $params['language'] = $this->validateLanguage($languageCode);
         }
 
         $generatedUrl = $gatewayBaseUrl . '?' . http_build_query($params);
@@ -141,13 +141,14 @@ class UrlGenerator
         return $currenciesList[$currencyCode];
     }
 
-    private function validateLanguage($language)
+    private function validateLanguage($languageCode)
     {
         $languages = new Languages();
-        if (!in_array($language, $languages->getList(), true)) {
+        if (!array_key_exists($languageCode, $languages->getList())) {
             return Languages::USA_LANGUAGE_CODE;
         }
-        return $language;
+
+        return $languageCode;
     }
 
     private function log($message, $level = LogLevel::DEBUG)

@@ -15,13 +15,13 @@ class Languages implements ValuesList
     public function getList()
     {
         return [
-            self::ITA_LANGUAGE_CODE,
-            self::USA_LANGUAGE_CODE,
-            self::FRA_LANGUAGE_CODE,
-            self::DEU_LANGUAGE_CODE,
-            self::SPA_LANGUAGE_CODE,
-            self::POR_LANGUAGE_CODE,
-            self::RUS_LANGUAGE_CODE,
+            self::ITA_LANGUAGE_CODE => 'Italian',
+            self::USA_LANGUAGE_CODE => 'English',
+            self::FRA_LANGUAGE_CODE => 'French',
+            self::DEU_LANGUAGE_CODE => 'German',
+            self::SPA_LANGUAGE_CODE => 'Spanish',
+            self::POR_LANGUAGE_CODE => 'Portuguese',
+            self::RUS_LANGUAGE_CODE => 'Russian',
         ];
     }
 }
