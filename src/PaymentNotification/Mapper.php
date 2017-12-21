@@ -26,12 +26,11 @@ class Mapper
 
     /**
      * @param ServerRequestInterface $request
-     * @param string $operationType
      *
      * @return Result\PaymentResultInterface
      * @throws \InvalidArgumentException
      */
-    public function map(ServerRequestInterface $request, $operationType = UrlGenerator::OPERATION_TYPE_INITIALIZE)
+    public function map(ServerRequestInterface $request)
     {
         $this->log(
             sprintf(
@@ -62,7 +61,7 @@ class Mapper
             return $paymentError;
         }
 
-        if ($operationType == UrlGenerator::OPERATION_TYPE_INITIALIZE_MYBANK) {
+        if (array_key_exists('mybankid', $requestBody)) {
             $this->checkRequiredMyBankParameters($requestBody);
 
             $result = new Result\MyBankPaymentResultInfo(

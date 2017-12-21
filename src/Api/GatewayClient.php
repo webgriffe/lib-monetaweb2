@@ -133,51 +133,17 @@ class GatewayClient
     }
 
     /**
-     * This call extracts the payment id from the server to server call. This is useful to retrieve some data from the
-     * local database in order to properly process the server to server message. For example this allows one to retrieve
-     * the payment type and know whether the payment was a normal payment or a MyBank payment.
-     *
      * @param ServerRequestInterface $request
-     *
-     * @return string
-     *
-     * @throws \Exception
-     */
-    public function getPaymentId(ServerRequestInterface $request)
-    {
-        $requestBody = $request->getParsedBody();
-        $requestBody = array_change_key_case($requestBody, CASE_LOWER);
-
-        if (array_key_exists('paymentid', $requestBody)) {
-            $paymentid = $requestBody['paymentid'];
-            $this->log('getPaymentId returns '.$paymentid);
-
-            return $paymentid;
-        }
-
-        throw new \RuntimeException('Missing paymentid in server to server message');
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param string $operationType The type of payment that this notify is dealing with. Possible values are
-     *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE and
-     *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE_MYBANK. In order to know
-     *      which value to pass here, please call the getPaymentId() method before calling this one, then retrieve
-     *      the payment information about the payment from your database. Among these information you should have saved
-     *      the operation type that must be passed here.
      *
      * @return PaymentResultInterface
      *
      * @throws \InvalidArgumentException
      */
-    public function handleNotify(
-        ServerRequestInterface $request,
-        $operationType = UrlGenerator::OPERATION_TYPE_INITIALIZE
-    ) {
-        $this->log('Handle notify method called with operation type: '.$operationType);
+    public function handleNotify(ServerRequestInterface $request)
+    {
+        $this->log('Handle notify method called');
         $mapper = new Mapper($this->logger);
-        return $mapper->map($request, $operationType);
+        return $mapper->map($request);
     }
 
     /**
