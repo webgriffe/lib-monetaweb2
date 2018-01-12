@@ -5,7 +5,7 @@ namespace Webgriffe\LibMonetaWebDue\PaymentNotification\Response;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInfo;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInterface;
 
-class GeneratorFactory
+class GeneratorFactory implements GeneratorFactoryInterface
 {
     /**
      * @param PaymentResultInterface $result
