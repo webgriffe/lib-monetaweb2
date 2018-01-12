@@ -8,7 +8,6 @@
 
 namespace Webgriffe\LibMonetaWebDue\PaymentNotification\Result;
 
-
 interface MybankPaymentResultInterface extends NonErrorPaymentResultInterface
 {
     const TRANSACTION_AUTHORISED_CODE   = 'AUTHORISED';
