@@ -77,6 +77,14 @@ class MyBankPaymentResultInfo implements MybankPaymentResultInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isError()
+    {
+        return $this->result === MybankPaymentResultInterface::TRANSACTION_ERROR_CODE;
+    }
+
+    /**
      * @return string
      */
     public function getResult()

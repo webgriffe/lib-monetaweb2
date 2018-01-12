@@ -16,6 +16,11 @@ interface MybankPaymentResultInterface extends NonErrorPaymentResultInterface
     const TRANSACTION_CANCELED_CODE     = 'CANCELED';
 
     /**
+     * @return bool
+     */
+    public function isError();
+
+    /**
      * @return string
      */
     public function getDescription();

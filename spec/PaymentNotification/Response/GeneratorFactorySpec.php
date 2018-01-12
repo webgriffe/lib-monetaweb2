@@ -6,6 +6,7 @@ use PhpSpec\ObjectBehavior;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Response\ErrorGenerator;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Response\SuccessGenerator;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\MyBankPaymentResultInfo;
+use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultErrorInfo;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInfo;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\CCPaymentResultInterface;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\MybankPaymentResultInterface;
@@ -28,6 +29,11 @@ class GeneratorFactorySpec extends ObjectBehavior
     {
         $paymentResult = $this->getMybankPaymentResult(MybankPaymentResultInterface::TRANSACTION_AUTHORISED_CODE);
         $this->getGenerator($paymentResult, 'success', 'error')->shouldReturnAnInstanceOf(SuccessGenerator::class);
+    }
+
+    public function it_should_return_error_when_payment_result_is_error(PaymentResultErrorInfo $result)
+    {
+        $this->getGenerator($result, 'success', 'error')->shouldReturnAnInstanceOf(ErrorGenerator::class);
     }
 
     /**
