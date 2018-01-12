@@ -9,11 +9,8 @@ use Respect\Validation\Validator;
 use Webgriffe\LibMonetaWebDue\Lists\Currencies;
 use Webgriffe\LibMonetaWebDue\Lists\Languages;
 
-class UrlGenerator
+class UrlGenerator implements UrlGeneratorInterface
 {
-    const OPERATION_TYPE_INITIALIZE         = 'initialize';
-    const OPERATION_TYPE_INITIALIZE_MYBANK  = 'initializemybank';
-
     /**
      * @var LoggerInterface
      */
@@ -40,8 +37,8 @@ class UrlGenerator
      * @param string|null $cardholderEmail
      * @param string|null $customField
      * @param string $operationType One of
-     *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE or
-     *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE_MYBANK
+     *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGeneratorInterface::OPERATION_TYPE_INITIALIZE or
+     *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGeneratorInterface::OPERATION_TYPE_INITIALIZE_MYBANK
      *
      * @return string
      *
@@ -62,7 +59,7 @@ class UrlGenerator
         $cardHolderName = null,
         $cardholderEmail = null,
         $customField = null,
-        $operationType = self::OPERATION_TYPE_INITIALIZE
+        $operationType = UrlGeneratorInterface::OPERATION_TYPE_INITIALIZE
     ) {
         $this->log('Generating payment initialization url');
 
@@ -78,7 +75,10 @@ class UrlGenerator
             throw new InvalidArgumentException($message);
         }
 
-        $validOperationTypes = array(self::OPERATION_TYPE_INITIALIZE, self::OPERATION_TYPE_INITIALIZE_MYBANK);
+        $validOperationTypes = array(
+            UrlGeneratorInterface::OPERATION_TYPE_INITIALIZE,
+            UrlGeneratorInterface::OPERATION_TYPE_INITIALIZE_MYBANK
+        );
 
         try {
             Validator::stringType()->length(1, 8)->assert($terminalId);
@@ -111,7 +111,7 @@ class UrlGenerator
             'customField' => $customField,
         ];
 
-        if ($operationType == self::OPERATION_TYPE_INITIALIZE) {
+        if ($operationType == UrlGeneratorInterface::OPERATION_TYPE_INITIALIZE) {
             $params['currencyCode'] = $currencyCode ? $this->getCurrencyNumericCode($currencyCode) : null;
             $params['language'] = $this->validateLanguage($languageCode);
         }

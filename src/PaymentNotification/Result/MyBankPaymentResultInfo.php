@@ -8,13 +8,8 @@
 
 namespace Webgriffe\LibMonetaWebDue\PaymentNotification\Result;
 
-class MyBankPaymentResultInfo implements NonErrorPaymentResultInterface
+class MyBankPaymentResultInfo implements MybankPaymentResultInterface
 {
-    const TRANSACTION_AUTHORISED_CODE   = 'AUTHORISED';
-    const TRANSACTION_ERROR_CODE        = 'ERROR';
-    const TRANSACTION_ABORTED_CODE      = 'AUTHORISINGPARTYABORTED';
-    const TRANSACTION_CANCELED_CODE     = 'CANCELED';
-
     private $paymentId;
     private $result;
     private $description;
@@ -69,7 +64,7 @@ class MyBankPaymentResultInfo implements NonErrorPaymentResultInterface
      */
     public function isSuccessful()
     {
-        return $this->result === self::TRANSACTION_AUTHORISED_CODE;
+        return $this->result === MybankPaymentResultInterface::TRANSACTION_AUTHORISED_CODE;
     }
 
     /**
@@ -77,7 +72,8 @@ class MyBankPaymentResultInfo implements NonErrorPaymentResultInterface
      */
     public function isCanceled()
     {
-        return $this->result === self::TRANSACTION_CANCELED_CODE || $this->result == self::TRANSACTION_ABORTED_CODE;
+        return $this->result === MybankPaymentResultInterface::TRANSACTION_CANCELED_CODE ||
+            $this->result == MybankPaymentResultInterface::TRANSACTION_ABORTED_CODE;
     }
 
     /**

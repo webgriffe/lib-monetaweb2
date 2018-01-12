@@ -8,11 +8,12 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator;
+use Webgriffe\LibMonetaWebDue\PaymentInit\UrlGeneratorInterface;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Mapper;
-use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInfo;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInterface;
+use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\NonErrorPaymentResultInterface;
 
-class GatewayClient
+class GatewayClient implements GatewayClientInterface
 {
     /**
      * @var ClientInterface $client
@@ -55,7 +56,7 @@ class GatewayClient
      *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE or
      *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator::OPERATION_TYPE_INITIALIZE_MYBANK
      *
-     * @return GatewayPageInfo
+     * @return GatewayPageInfoInterface
      *
      * @throws \Psr\Log\InvalidArgumentException
      * @throws \InvalidArgumentException
@@ -76,7 +77,7 @@ class GatewayClient
         $cardHolderName = null,
         $cardholderEmail = null,
         $customField = null,
-        $operationType = UrlGenerator::OPERATION_TYPE_INITIALIZE
+        $operationType = UrlGeneratorInterface::OPERATION_TYPE_INITIALIZE
     ) {
         $this->log('Get payment page info method called');
 
@@ -148,10 +149,10 @@ class GatewayClient
 
     /**
      * @param string $storedSecurityToken
-     * @param PaymentResultInfo $paymentResult
+     * @param NonErrorPaymentResultInterface $paymentResult
      * @return bool
      */
-    public function verifySecurityToken($storedSecurityToken, PaymentResultInfo $paymentResult)
+    public function verifySecurityToken($storedSecurityToken, NonErrorPaymentResultInterface $paymentResult)
     {
         if (function_exists('hash_equals')) {
             return hash_equals($storedSecurityToken, $paymentResult->getSecurityToken());

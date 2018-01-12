@@ -4,6 +4,7 @@ namespace spec\Webgriffe\LibMonetaWebDue\PaymentNotification\Result;
 
 use PhpSpec\ObjectBehavior;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInfo;
+use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\CCPaymentResultInterface;
 
 class PaymentResultInfoSpec extends ObjectBehavior
 {
@@ -18,8 +19,8 @@ class PaymentResultInfoSpec extends ObjectBehavior
             '483054******1294',
             'TRCK0001',
             '123456789012345678',
-            PaymentResultInfo::SUCCESSFUL_RESPONSE_CODE,
-            PaymentResultInfo::TRANSACTION_APPROVED_CODE,
+            CCPaymentResultInterface::SUCCESSFUL_RESPONSE_CODE,
+            CCPaymentResultInterface::TRANSACTION_APPROVED_CODE,
             '123456789012',
             '80957febda6a467c82d34da0e0673a6e',
             'S'
@@ -41,7 +42,7 @@ class PaymentResultInfoSpec extends ObjectBehavior
             'TRCK0001',
             '123456789012345678',
             '020',
-            PaymentResultInfo::TRANSACTION_NOT_APPROVED_CODE,
+            CCPaymentResultInterface::TRANSACTION_NOT_APPROVED_CODE,
             '123456789012',
             '80957febda6a467c82d34da0e0673a6e',
             'S'
@@ -63,7 +64,7 @@ class PaymentResultInfoSpec extends ObjectBehavior
             'TRCK0001',
             '123456789012345678',
             '000',
-            PaymentResultInfo::TRANSACTION_CAPTURED_CODE,
+            CCPaymentResultInterface::TRANSACTION_CAPTURED_CODE,
             '123456789012',
             '80957febda6a467c82d34da0e0673a6e',
             'S'
@@ -85,7 +86,7 @@ class PaymentResultInfoSpec extends ObjectBehavior
             'TRCK0001',
             '123456789012345678',
             '000',
-            PaymentResultInfo::TRANSACTION_CANCELED_CODE,
+            CCPaymentResultInterface::TRANSACTION_CANCELED_CODE,
             '123456789012',
             '80957febda6a467c82d34da0e0673a6e',
             'S'

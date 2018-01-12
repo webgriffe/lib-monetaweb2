@@ -2,7 +2,7 @@
 
 namespace Webgriffe\LibMonetaWebDue\Api;
 
-class GatewayPageInfo
+class GatewayPageInfo implements GatewayPageInfoInterface
 {
     private $hostedPageUrl;
     private $securityToken;

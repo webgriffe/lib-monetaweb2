@@ -19,6 +19,7 @@ class GeneratorFactory
         if ($result instanceof PaymentResultInfo && $result->isSuccessful()) {
             return new SuccessGenerator($successUrl, $errorUrl);
         }
+
         return new ErrorGenerator($successUrl, $errorUrl);
     }
 }

@@ -6,12 +6,13 @@ use PhpSpec\ObjectBehavior;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Response\ErrorGenerator;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Response\SuccessGenerator;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInfo;
+use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\CCPaymentResultInterface;
 
 class GeneratorFactorySpec extends ObjectBehavior
 {
     public function it_should_return_success_generator_when_payment_result_is_successful()
     {
-        $paymentResult = $this->getPaymentResult(PaymentResultInfo::SUCCESSFUL_RESPONSE_CODE);
+        $paymentResult = $this->getPaymentResult(CCPaymentResultInterface::SUCCESSFUL_RESPONSE_CODE);
         $this->getGenerator($paymentResult, 'success', 'error')->shouldReturnAnInstanceOf(SuccessGenerator::class);
     }
 
@@ -37,7 +38,7 @@ class GeneratorFactorySpec extends ObjectBehavior
             'TRCK0001',
             '123456789012345678',
             $responseCode,
-            PaymentResultInfo::TRANSACTION_APPROVED_CODE,
+            CCPaymentResultInterface::TRANSACTION_APPROVED_CODE,
             '123456789012',
             '80957febda6a467c82d34da0e0673a6e',
             'S'

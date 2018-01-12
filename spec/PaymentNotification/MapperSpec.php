@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\ServerRequest;
 use PhpSpec\ObjectBehavior;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Mapper;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInfo;
+use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\CCPaymentResultInterface;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\MyBankPaymentResultInfo;
 
 class MapperSpec extends ObjectBehavior
@@ -58,7 +59,7 @@ class MapperSpec extends ObjectBehavior
         $request = new ServerRequest('POST', 'any uri');
         $parsedBody = [
             'paymentid' => '123456789012345678',
-            'result' => PaymentResultInfo::TRANSACTION_CANCELED_CODE,
+            'result' => CCPaymentResultInterface::TRANSACTION_CANCELED_CODE,
             'threedsecure' => 'S'
         ];
         $request = $request->withParsedBody($parsedBody);
@@ -73,7 +74,7 @@ class MapperSpec extends ObjectBehavior
             null,
             '123456789012345678',
             null,
-            PaymentResultInfo::TRANSACTION_CANCELED_CODE,
+            CCPaymentResultInterface::TRANSACTION_CANCELED_CODE,
             null,
             null,
             'S'

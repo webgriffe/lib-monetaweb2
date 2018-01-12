@@ -2,15 +2,8 @@
 
 namespace Webgriffe\LibMonetaWebDue\PaymentNotification\Result;
 
-class PaymentResultInfo implements NonErrorPaymentResultInterface
+class PaymentResultInfo implements CCPaymentResultInterface
 {
-    const SUCCESSFUL_RESPONSE_CODE = '000';
-
-    const TRANSACTION_APPROVED_CODE     = 'APPROVED';
-    const TRANSACTION_NOT_APPROVED_CODE = 'NOT APPROVED';
-    const TRANSACTION_CAPTURED_CODE     = 'CAPTURED';
-    const TRANSACTION_CANCELED_CODE     = 'CANCELED';
-
     private $authorizationCode;
     private $cardCountry;
     private $cardExpiryDate;
@@ -80,7 +73,7 @@ class PaymentResultInfo implements NonErrorPaymentResultInterface
      */
     public function isApproved()
     {
-        return $this->result === self::TRANSACTION_APPROVED_CODE;
+        return $this->result === CCPaymentResultInterface::TRANSACTION_APPROVED_CODE;
     }
 
     /**
@@ -91,7 +84,7 @@ class PaymentResultInfo implements NonErrorPaymentResultInterface
      */
     public function isCapturedOnly()
     {
-        return $this->result === self::TRANSACTION_CAPTURED_CODE;
+        return $this->result === CCPaymentResultInterface::TRANSACTION_CAPTURED_CODE;
     }
 
     /**
@@ -99,7 +92,7 @@ class PaymentResultInfo implements NonErrorPaymentResultInterface
      */
     public function isCanceled()
     {
-        return $this->result === self::TRANSACTION_CANCELED_CODE;
+        return $this->result === CCPaymentResultInterface::TRANSACTION_CANCELED_CODE;
     }
 
     /**
@@ -107,7 +100,7 @@ class PaymentResultInfo implements NonErrorPaymentResultInterface
      */
     public function isSuccessful()
     {
-        return $this->responseCode === self::SUCCESSFUL_RESPONSE_CODE;
+        return $this->responseCode === CCPaymentResultInterface::SUCCESSFUL_RESPONSE_CODE;
     }
 
     /**

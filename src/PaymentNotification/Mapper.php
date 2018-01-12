@@ -5,9 +5,8 @@ namespace Webgriffe\LibMonetaWebDue\PaymentNotification;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator;
 
-class Mapper
+class Mapper implements MapperInterface
 {
     /**
      * @var LoggerInterface
