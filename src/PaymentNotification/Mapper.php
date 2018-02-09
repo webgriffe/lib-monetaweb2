@@ -60,6 +60,9 @@ class Mapper implements MapperInterface
             return $paymentError;
         }
 
+        //@fixme In case of canceled transactions this check is not correct as only the paymentid, result end
+        //threedsecure fields are sent.
+        //Maybe it would be better to return a different type of object for this case?
         if (array_key_exists('mybankid', $requestBody)) {
             $this->checkRequiredMyBankParameters($requestBody);
 
