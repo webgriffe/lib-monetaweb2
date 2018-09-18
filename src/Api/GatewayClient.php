@@ -7,6 +7,8 @@ use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Webgriffe\LibMonetaWebDue\PaymentCapture\Request\RequestGenerator;
+use Webgriffe\LibMonetaWebDue\PaymentCapture\Response\ResponseInterface;
 use Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator;
 use Webgriffe\LibMonetaWebDue\PaymentInit\UrlGeneratorInterface;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Mapper;
@@ -99,6 +101,7 @@ class GatewayClient implements GatewayClientInterface
             $operationType
         );
 
+        //@todo: this should be a POST, so parameters should not be in the URL!
         $request = new Request('POST', $paymentInitUrl);
         $this->log(sprintf('Doing a request with the following data: %s', PHP_EOL . print_r($request, true)));
         $response = $this->client->send($request);
@@ -110,8 +113,8 @@ class GatewayClient implements GatewayClientInterface
         if (isset($parsedResponseBody->errorcode) || isset($parsedResponseBody->errormessage)) {
             $message = sprintf(
                 'The request sent to MonetaWebDue gateway generated an error with code "%s" and message: %s',
-                $parsedResponseBody->errorCode,
-                $parsedResponseBody->errorMessage
+                $parsedResponseBody->errorcode,
+                $parsedResponseBody->errormessage
             );
             $this->log($message, LogLevel::ERROR);
             throw new \RuntimeException($message);
@@ -159,6 +162,51 @@ class GatewayClient implements GatewayClientInterface
         }
 
         return strcmp($storedSecurityToken, $paymentResult->getSecurityToken()) === 0;
+    }
+
+    /**
+     * @param $gatewayBaseUrl
+     * @param $terminalId
+     * @param $terminalPassword
+     * @param $amount
+     * @param $currencyCode
+     * @param $orderId
+     * @param $paymentId
+     * @param null $customField
+     * @param null $description
+     *
+     * @return ResponseInterface
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function capture(
+        $gatewayBaseUrl,
+        $terminalId,
+        $terminalPassword,
+        $amount,
+        $currencyCode,
+        $orderId,
+        $paymentId,
+        $customField = null,
+        $description = null
+    ) {
+        $requestGenerator = new RequestGenerator($this->logger);
+        $request = $requestGenerator->generate(
+            $gatewayBaseUrl,
+            $terminalId,
+            $terminalPassword,
+            $amount,
+            $currencyCode,
+            $orderId,
+            $paymentId,
+            $customField,
+            $description
+        );
+
+        $response = $this->client->send($request);
+
+        $mapper = new \Webgriffe\LibMonetaWebDue\PaymentCapture\Response\Mapper($this->logger);
+        return $mapper->map($response);
     }
 
     private function log($message, $level = LogLevel::DEBUG)
