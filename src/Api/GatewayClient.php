@@ -203,7 +203,9 @@ class GatewayClient implements GatewayClientInterface
             $description
         );
 
+        $this->log('Before sending capture request to the gateway');
         $response = $this->client->send($request);
+        $this->log('After sending capture request to the gateway');
 
         $mapper = new \Webgriffe\LibMonetaWebDue\PaymentCapture\Response\Mapper($this->logger);
         return $mapper->map($response);

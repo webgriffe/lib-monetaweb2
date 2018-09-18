@@ -45,13 +45,15 @@ class Mapper implements MapperInterface
 
         if (isset($xml->errorcode) || isset($xml->errormessage)) {
             $message = sprintf(
-                'The capture request generated an error with code "%s" and message: %s',
-                $xml->errorCode,
-                $xml->errorMessage
+                'The capture request generated an error with code "%s" and message: "%s"',
+                $xml->errorcode,
+                $xml->errormessage
             );
             $this->log($message, LogLevel::ERROR);
             throw new \RuntimeException($message);
         }
+
+        $this->log('XML response appears to be succesful');
 
         return new SuccessResponse(
             $xml->paymentid,
