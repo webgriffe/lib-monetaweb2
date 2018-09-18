@@ -9,6 +9,7 @@
 namespace Webgriffe\LibMonetaWebDue\Api;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Webgriffe\LibMonetaWebDue\PaymentCapture\Response\ResponseInterface;
 use Webgriffe\LibMonetaWebDue\PaymentInit\UrlGeneratorInterface;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\NonErrorPaymentResultInterface;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\PaymentResultInterface;
@@ -66,4 +67,31 @@ interface GatewayClientInterface
      * @return bool
      */
     public function verifySecurityToken($storedSecurityToken, NonErrorPaymentResultInterface $paymentResult);
+
+    /**
+     * @param $gatewayBaseUrl
+     * @param $terminalId
+     * @param $terminalPassword
+     * @param $amount
+     * @param $currencyCode
+     * @param $orderId
+     * @param $paymentId
+     * @param null $customField
+     * @param null $description
+     *
+     * @return ResponseInterface
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function capture(
+        $gatewayBaseUrl,
+        $terminalId,
+        $terminalPassword,
+        $amount,
+        $currencyCode,
+        $orderId,
+        $paymentId,
+        $customField = null,
+        $description = null
+    );
 }
