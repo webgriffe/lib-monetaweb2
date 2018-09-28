@@ -8,7 +8,7 @@
 
 namespace Webgriffe\LibMonetaWebDue\PaymentCapture\Request;
 
-use GuzzleHttp\Psr7\Request;
+use Webgriffe\LibMonetaWebDue\LogicRequestDataContainerInterface;
 
 interface RequestGeneratorInterface
 {
@@ -23,7 +23,7 @@ interface RequestGeneratorInterface
      * @param null $customField
      * @param null $description
      *
-     * @return \Psr\Http\Message\RequestInterface
+     * @return LogicRequestDataContainerInterface
      */
     public function generate(
         $gatewayBaseUrl,

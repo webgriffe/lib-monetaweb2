@@ -191,7 +191,7 @@ class GatewayClient implements GatewayClientInterface
         $description = null
     ) {
         $requestGenerator = new RequestGenerator($this->logger);
-        $request = $requestGenerator->generate(
+        $requestData = $requestGenerator->generate(
             $gatewayBaseUrl,
             $terminalId,
             $terminalPassword,
@@ -204,7 +204,11 @@ class GatewayClient implements GatewayClientInterface
         );
 
         $this->log('Before sending capture request to the gateway');
-        $response = $this->client->send($request);
+        $response = $this->client->request(
+            $requestData->getMethod(),
+            $requestData->getUrl(),
+            ['form_params' => $requestData->getParams()]
+        );
         $this->log('After sending capture request to the gateway');
 
         $mapper = new \Webgriffe\LibMonetaWebDue\PaymentCapture\Response\Mapper($this->logger);

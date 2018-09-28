@@ -14,6 +14,8 @@ use Webgriffe\LibMonetaWebDue\Lists\Currencies;
 use GuzzleHttp\Psr7\Request;
 use Psr\Log\InvalidArgumentException;
 use Respect\Validation\Validator;
+use Webgriffe\LibMonetaWebDue\LogicRequestDataContainer;
+use Webgriffe\LibMonetaWebDue\LogicRequestDataContainerInterface;
 
 class RequestGenerator implements RequestGeneratorInterface
 {
@@ -38,7 +40,7 @@ class RequestGenerator implements RequestGeneratorInterface
      * @param null $customField
      * @param null $description
      *
-     * @return \Psr\Http\Message\RequestInterface
+     * @return LogicRequestDataContainerInterface
      */
     public function generate(
         $gatewayBaseUrl,
@@ -92,7 +94,7 @@ class RequestGenerator implements RequestGeneratorInterface
 
         $this->log('Request params: '.print_r($params, true));
 
-        return new Request('POST', $gatewayBaseUrl, [], ['form_params' => $params]);
+        return new LogicRequestDataContainer($gatewayBaseUrl, 'POST', $params);
     }
 
     /**
