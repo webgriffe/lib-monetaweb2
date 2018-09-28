@@ -8,7 +8,6 @@
 
 namespace Webgriffe\LibMonetaWebDue\PaymentCapture\Response;
 
-
 class SuccessResponse implements SuccessResponseInterface
 {
     /**
