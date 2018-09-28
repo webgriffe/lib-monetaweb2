@@ -83,7 +83,7 @@ class RequestGenerator implements RequestGeneratorInterface
             'password' => $terminalPassword,
             'operationtype' => 'confirm',
             'amount' => number_format($amount, 2, '.', ''),
-            'currencytode' => $this->getCurrencyNumericCode($currencyCode),
+            'currencycode' => $this->getCurrencyNumericCode($currencyCode),
             'merchantorderid' => $orderId.'C',
             'paymentid' => $paymentId,
             'customfield' => $customField,
