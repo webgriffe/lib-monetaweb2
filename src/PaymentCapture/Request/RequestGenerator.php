@@ -92,7 +92,7 @@ class RequestGenerator implements RequestGeneratorInterface
 
         $this->log('Request params: '.print_r($params, true));
 
-        return new Request('POST', $gatewayBaseUrl, [], http_build_query($params));
+        return new Request('POST', $gatewayBaseUrl, [], ['form_params' => $params]);
     }
 
     /**
