@@ -28,15 +28,24 @@ class GatewayClient implements GatewayClientInterface
     private $logger;
 
     /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
+    /**
      * GatewayClient constructor.
      *
      * @param ClientInterface $client
      * @param LoggerInterface|null $logger
      */
-    public function __construct(ClientInterface $client, LoggerInterface $logger = null)
-    {
+    public function __construct(
+        ClientInterface $client,
+        LoggerInterface $logger = null,
+        UrlGeneratorInterface $urlGenerator = null
+    ) {
         $this->client = $client;
         $this->logger = $logger;
+        $this->urlGenerator = $urlGenerator ?: new UrlGenerator();
     }
 
     /** @noinspection MoreThanThreeArgumentsInspection */
@@ -83,8 +92,7 @@ class GatewayClient implements GatewayClientInterface
     ) {
         $this->log('Get payment page info method called');
 
-        $urlGenerator = new UrlGenerator();
-        $paymentInitUrl = $urlGenerator->generate(
+        $requestData = $this->urlGenerator->generate(
             $gatewayBaseUrl,
             $terminalId,
             $terminalPassword,
@@ -101,10 +109,14 @@ class GatewayClient implements GatewayClientInterface
             $operationType
         );
 
-        //@todo: this should be a POST, so parameters should not be in the URL!
-        $request = new Request('POST', $paymentInitUrl);
-        $this->log(sprintf('Doing a request with the following data: %s', PHP_EOL . print_r($request, true)));
-        $response = $this->client->send($request);
+        $this->log(
+            sprintf('Doing a request with the following data: %s', PHP_EOL . print_r($requestData->getParams(), true))
+        );
+        $response = $this->client->request(
+            $requestData->getMethod(),
+            $requestData->getUrl(),
+            ['form_params' => $requestData->getParams()]
+        );
         $this->log(sprintf('The request returned the following response: %s', PHP_EOL . print_r($response, true)));
 
         // todo: handle xml parsing errors

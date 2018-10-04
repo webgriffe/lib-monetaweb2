@@ -8,6 +8,8 @@ use Psr\Log\LogLevel;
 use Respect\Validation\Validator;
 use Webgriffe\LibMonetaWebDue\Lists\Currencies;
 use Webgriffe\LibMonetaWebDue\Lists\Languages;
+use Webgriffe\LibMonetaWebDue\LogicRequestDataContainer;
+use Webgriffe\LibMonetaWebDue\LogicRequestDataContainerInterface;
 
 class UrlGenerator implements UrlGeneratorInterface
 {
@@ -40,7 +42,7 @@ class UrlGenerator implements UrlGeneratorInterface
      *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGeneratorInterface::OPERATION_TYPE_INITIALIZE or
      *      \Webgriffe\LibMonetaWebDue\PaymentInit\UrlGeneratorInterface::OPERATION_TYPE_INITIALIZE_MYBANK
      *
-     * @return string
+     * @return LogicRequestDataContainerInterface
      *
      * @throws \Psr\Log\InvalidArgumentException
      * @throws \InvalidArgumentException
@@ -116,9 +118,9 @@ class UrlGenerator implements UrlGeneratorInterface
             $params['language'] = $this->validateLanguage($languageCode);
         }
 
-        $generatedUrl = $gatewayBaseUrl . '?' . http_build_query($params);
-        $this->log('Generated URL is: ' . $generatedUrl);
-        return $generatedUrl;
+        $this->log('Request params: '.print_r($params, true));
+
+        return new LogicRequestDataContainer($gatewayBaseUrl, 'POST', $params);
     }
 
     /**

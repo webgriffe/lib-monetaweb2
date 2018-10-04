@@ -38,10 +38,17 @@ class GatewayClientSpec extends ObjectBehavior
 XML;
         $expectedResponse = new Response(200, [], $expectedResponseBody);
 
-        $client->send(Argument::type(RequestInterface::class))->shouldBeCalled()->willReturn($expectedResponse);
+        $client->request(
+            'POST',
+            'https://www.monetaonline.it/monetaweb/payment/2/xml',
+            Argument::type('array')
+        )
+            ->shouldBeCalled()
+            ->willReturn($expectedResponse);
+
         $this->beConstructedWith($client);
         $this->getPaymentPageInfo(
-            'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+            'https://www.monetaonline.it/monetaweb/payment/2/xml',
             '99999999',
             '99999999',
             1428.7,
@@ -62,7 +69,11 @@ XML;
 
     public function it_should_throw_error_when_parameters_are_wrong(ClientInterface $client)
     {
-        $client->send(Argument::type(RequestInterface::class))->shouldNotBeCalled();
+        $client->request(
+            'POST',
+            'https://www.monetaonline.it/monetaweb/payment/2/xml',
+            Argument::type('array')
+        )->shouldNotBeCalled();
         $this->beConstructedWith($client);
         $this->shouldThrow(\InvalidArgumentException::class)
             ->duringGetPaymentPageInfo(
@@ -89,11 +100,15 @@ XML;
 XML;
         $expectedResponse = new Response(200, [], $expectedResponseBody);
 
-        $client->send(Argument::type(RequestInterface::class))->shouldBeCalled()->willReturn($expectedResponse);
+        $client->request(
+            'POST',
+            'https://www.monetaonline.it/monetaweb/payment/2/xml',
+            Argument::type('array')
+        )->shouldBeCalled()->willReturn($expectedResponse);
         $this->beConstructedWith($client);
         $this->shouldThrow(\RuntimeException::class)
             ->duringGetPaymentPageInfo(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 1428.7,

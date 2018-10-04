@@ -3,6 +3,7 @@
 namespace spec\Webgriffe\LibMonetaWebDue\PaymentInit;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Webgriffe\LibMonetaWebDue\PaymentInit\UrlGenerator;
 use PhpSpec\ObjectBehavior;
 
@@ -17,7 +18,7 @@ class UrlGeneratorSpec extends ObjectBehavior
     {
         $this
             ->generate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 1428.7,
@@ -30,30 +31,28 @@ class UrlGeneratorSpec extends ObjectBehavior
                 'NomeCognome',
                 'nome@dominio.com',
                 'campoPersonalizzabile'
-            )
-            ->shouldReturn(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet' .
-                '?id=99999999' .
-                '&password=99999999' .
-                '&operationType=initialize' .
-                '&amount=1428.70' .
-                '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
-                '&recoveryUrl=http%3A%2F%2Fwww.merchant.it%2Ferror.jsp' .
-                '&merchantOrderId=TRCK0001' .
-                '&description=Descrizione' .
-                '&cardHolderName=NomeCognome' .
-                '&cardHolderEmail=nome%40dominio.com' .
-                '&customField=campoPersonalizzabile' .
-                '&currencyCode=978' .
-                '&language=ITA'
-            );
+            )->getParams()->shouldBe([
+                'id' => '99999999',
+                'password' => '99999999',
+                'operationType' => 'initialize',
+                'amount' => '1428.70',
+                'responseToMerchantUrl' => 'http://www.merchant.it/notify.jsp',
+                'recoveryUrl' => 'http://www.merchant.it/error.jsp',
+                'merchantOrderId' => 'TRCK0001',
+                'description' => 'Descrizione',
+                'cardHolderName' => 'NomeCognome',
+                'cardHolderEmail' => 'nome@dominio.com',
+                'customField' => 'campoPersonalizzabile',
+                'currencyCode' => '978',
+                'language' => 'ITA'
+            ]);
     }
 
     public function it_generates_correct_mybank_url()
     {
         $this
             ->generate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 1428.7,
@@ -67,21 +66,19 @@ class UrlGeneratorSpec extends ObjectBehavior
                 'nome@dominio.com',
                 'campoPersonalizzabile',
                 'initializemybank'
-            )
-            ->shouldReturn(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet' .
-                '?id=99999999' .
-                '&password=99999999' .
-                '&operationType=initializemybank' .
-                '&amount=1428.70' .
-                '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
-                '&recoveryUrl=http%3A%2F%2Fwww.merchant.it%2Ferror.jsp' .
-                '&merchantOrderId=TRCK0001' .
-                '&description=Descrizione' .
-                '&cardHolderName=NomeCognome' .
-                '&cardHolderEmail=nome%40dominio.com' .
-                '&customField=campoPersonalizzabile'
-            );
+            )->getParams()->shouldBe([
+                'id' => '99999999',
+                'password' => '99999999',
+                'operationType' => 'initializemybank',
+                'amount' => '1428.70',
+                'responseToMerchantUrl' => 'http://www.merchant.it/notify.jsp',
+                'recoveryUrl' => 'http://www.merchant.it/error.jsp',
+                'merchantOrderId' => 'TRCK0001',
+                'description' => 'Descrizione',
+                'cardHolderName' => 'NomeCognome',
+                'cardHolderEmail' => 'nome@dominio.com',
+                'customField' => 'campoPersonalizzabile',
+            ]);
     }
 
     public function it_throws_exception_when_currency_is_not_supported()
@@ -89,7 +86,7 @@ class UrlGeneratorSpec extends ObjectBehavior
         $this
             ->shouldThrow(\InvalidArgumentException::class)
             ->duringGenerate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 1428.7,
@@ -109,7 +106,7 @@ class UrlGeneratorSpec extends ObjectBehavior
     {
         $this
             ->generate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 1428.7,
@@ -122,45 +119,47 @@ class UrlGeneratorSpec extends ObjectBehavior
                 'NomeCognome',
                 'nome@dominio.com',
                 'campoPersonalizzabile'
-            )
-            ->shouldReturn(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet' .
-                '?id=99999999' .
-                '&password=99999999' .
-                '&operationType=initialize' .
-                '&amount=1428.70' .
-                '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
-                '&recoveryUrl=http%3A%2F%2Fwww.merchant.it%2Ferror.jsp' .
-                '&merchantOrderId=TRCK0001' .
-                '&description=Descrizione' .
-                '&cardHolderName=NomeCognome' .
-                '&cardHolderEmail=nome%40dominio.com' .
-                '&customField=campoPersonalizzabile' .
-                '&currencyCode=978' .
-                '&language=USA'
-            );
+            )->getParams()->shouldBe([
+                'id' => '99999999',
+                'password' => '99999999',
+                'operationType' => 'initialize',
+                'amount' => '1428.70',
+                'responseToMerchantUrl' => 'http://www.merchant.it/notify.jsp',
+                'recoveryUrl' => 'http://www.merchant.it/error.jsp',
+                'merchantOrderId' => 'TRCK0001',
+                'description' => 'Descrizione',
+                'cardHolderName' => 'NomeCognome',
+                'cardHolderEmail' => 'nome@dominio.com',
+                'customField' => 'campoPersonalizzabile',
+                'currencyCode' => '978',
+                'language' => 'USA'
+            ]);
     }
 
-    public function it_should_log_generated_url_if_a_logger_is_given(LoggerInterface $logger)
+    public function it_should_log_request_params_if_a_logger_is_given(LoggerInterface $logger)
     {
-        $generatedUrl = 'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet' .
-            '?id=99999999' .
-            '&password=99999999' .
-            '&operationType=initialize' .
-            '&amount=1428.70' .
-            '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
-            '&recoveryUrl=http%3A%2F%2Fwww.merchant.it%2Ferror.jsp' .
-            '&merchantOrderId=TRCK0001' .
-            '&description=Descrizione' .
-            '&cardHolderName=NomeCognome' .
-            '&cardHolderEmail=nome%40dominio.com' .
-            '&customField=campoPersonalizzabile' .
-            '&currencyCode=978' .
-            '&language=ITA';
+        $params = [
+            'id' => '99999999',
+            'password' => '99999999',
+            'operationType' => 'initialize',
+            'amount' => '1428.70',
+            'responseToMerchantUrl' => 'http://www.merchant.it/notify.jsp',
+            'recoveryUrl' => 'http://www.merchant.it/error.jsp',
+            'merchantOrderId' => 'TRCK0001',
+            'description' => 'Descrizione',
+            'cardHolderName' => 'NomeCognome',
+            'cardHolderEmail' => 'nome@dominio.com',
+            'customField' => 'campoPersonalizzabile',
+            'currencyCode' => '978',
+            'language' => 'ITA'
+        ];
+
+        $logger->log(LogLevel::DEBUG, '[Lib MonetaWeb2]: Generating payment initialization url')->shouldBeCalled();
+        $logger->log(LogLevel::DEBUG, '[Lib MonetaWeb2]: Request params: '.print_r($params, true))->shouldBeCalled();
 
         $this->beConstructedWith($logger);
         $this->generate(
-            'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+            'https://www.monetaonline.it/monetaweb/payment/2/xml',
             '99999999',
             '99999999',
             1428.7,
@@ -180,7 +179,7 @@ class UrlGeneratorSpec extends ObjectBehavior
     {
         $this
             ->generate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 1428.7,
@@ -189,24 +188,28 @@ class UrlGeneratorSpec extends ObjectBehavior
                 'http://www.merchant.it/notify.jsp',
                 null,
                 'TRCK0001'
-            )
-            ->shouldReturn(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet' .
-                '?id=99999999' .
-                '&password=99999999' .
-                '&operationType=initialize' .
-                '&amount=1428.70' .
-                '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
-                '&merchantOrderId=TRCK0001' .
-                '&language=ITA'
-            );
+            )->getParams()->shouldBe([
+                'id' => '99999999',
+                'password' => '99999999',
+                'operationType' => 'initialize',
+                'amount' => '1428.70',
+                'responseToMerchantUrl' => 'http://www.merchant.it/notify.jsp',
+                'recoveryUrl' => null,
+                'merchantOrderId' => 'TRCK0001',
+                'description' => null,
+                'cardHolderName' => null,
+                'cardHolderEmail' => null,
+                'customField' => null,
+                'currencyCode' => null,
+                'language' => 'ITA'
+            ]);
     }
 
     public function it_should_throw_error_when_required_parameters_are_not_given()
     {
         $this->shouldThrow(\InvalidArgumentException::class)
             ->duringGenerate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 null,
@@ -222,7 +225,7 @@ class UrlGeneratorSpec extends ObjectBehavior
     {
         $this->shouldThrow(\InvalidArgumentException::class)
             ->duringGenerate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 0.0,
@@ -238,7 +241,7 @@ class UrlGeneratorSpec extends ObjectBehavior
     {
         $this
             ->generate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 0.01,
@@ -247,24 +250,28 @@ class UrlGeneratorSpec extends ObjectBehavior
                 'http://www.merchant.it/notify.jsp',
                 null,
                 'TRCK0001'
-            )
-            ->shouldReturn(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet' .
-                '?id=99999999' .
-                '&password=99999999' .
-                '&operationType=initialize' .
-                '&amount=0.01' .
-                '&responseToMerchantUrl=http%3A%2F%2Fwww.merchant.it%2Fnotify.jsp' .
-                '&merchantOrderId=TRCK0001' .
-                '&language=ITA'
-            );
+            )->getParams()->shouldBe([
+                'id' => '99999999',
+                'password' => '99999999',
+                'operationType' => 'initialize',
+                'amount' => '0.01',
+                'responseToMerchantUrl' => 'http://www.merchant.it/notify.jsp',
+                'recoveryUrl' => null,
+                'merchantOrderId' => 'TRCK0001',
+                'description' => null,
+                'cardHolderName' => null,
+                'cardHolderEmail' => null,
+                'customField' => null,
+                'currencyCode' => null,
+                'language' => 'ITA'
+            ]);
     }
 
     public function it_should_throw_exception_when_terminal_id_is_too_long()
     {
         $this->shouldThrow(\InvalidArgumentException::class)
             ->duringGenerate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999111',
                 '99999999',
                 1428.7,
@@ -284,7 +291,7 @@ class UrlGeneratorSpec extends ObjectBehavior
     {
         $this->shouldThrow(\InvalidArgumentException::class)
             ->duringGenerate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 'a',
@@ -304,7 +311,7 @@ class UrlGeneratorSpec extends ObjectBehavior
     {
         $this->shouldThrow(\InvalidArgumentException::class)
             ->duringGenerate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 1428.7,
@@ -324,7 +331,7 @@ class UrlGeneratorSpec extends ObjectBehavior
     {
         $this->shouldThrow(\InvalidArgumentException::class)
             ->duringGenerate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 1428.7,
@@ -344,7 +351,7 @@ class UrlGeneratorSpec extends ObjectBehavior
     {
         $this->shouldThrow(\InvalidArgumentException::class)
             ->duringGenerate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 1428.7,
@@ -364,7 +371,7 @@ class UrlGeneratorSpec extends ObjectBehavior
     {
         $this->shouldThrow(\InvalidArgumentException::class)
             ->duringGenerate(
-                'https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet',
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
                 '99999999',
                 '99999999',
                 1428.7,

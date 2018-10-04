@@ -8,6 +8,8 @@
 
 namespace Webgriffe\LibMonetaWebDue\PaymentInit;
 
+use Webgriffe\LibMonetaWebDue\LogicRequestDataContainerInterface;
+
 interface UrlGeneratorInterface
 {
     const OPERATION_TYPE_INITIALIZE         = 'initialize';
@@ -29,7 +31,7 @@ interface UrlGeneratorInterface
      * @param null $customField
      * @param $operationType
      *
-     * @return string
+     * @return LogicRequestDataContainerInterface
      */
     public function generate(
         $gatewayBaseUrl,
