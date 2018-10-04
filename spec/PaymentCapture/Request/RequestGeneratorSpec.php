@@ -156,4 +156,175 @@ class RequestGeneratorSpec extends ObjectBehavior
                 '841826491344182719'
             );
     }
+
+    public function it_should_throw_exception_if_terminal_id_is_too_long()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://url.com/',
+                '1234567890',
+                '99999999',
+                59.00,
+                'EUR',
+                '000000156',
+                '841826491344182719'
+            );
+    }
+
+    public function it_should_throw_exception_if_password_is_too_long()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://url.com/',
+                '99999999',
+                '123456789012345678901234567890123456789012345678901',
+                59.00,
+                'EUR',
+                '000000156',
+                '841826491344182719'
+            );
+    }
+
+    public function it_should_throw_exception_if_amount_is_integer()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://url.com/',
+                '99999999',
+                '99999999',
+                59,
+                'EUR',
+                '000000156',
+                '841826491344182719'
+            );
+    }
+
+    public function it_should_throw_exception_if_amount_is_string()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://url.com/',
+                '99999999',
+                '99999999',
+                '59.00',
+                'EUR',
+                '000000156',
+                '841826491344182719'
+            );
+    }
+
+    public function it_should_throw_exception_if_currency_code_is_too_short()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://url.com/',
+                '99999999',
+                '99999999',
+                59.00,
+                'EU',
+                '000000156',
+                '841826491344182719'
+            );
+    }
+
+    public function it_should_throw_exception_if_currency_code_is_too_long()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://url.com/',
+                '99999999',
+                '99999999',
+                59.00,
+                'EURO',
+                '000000156',
+                '841826491344182719'
+            );
+    }
+
+    public function it_should_throw_exception_if_order_id_contains_not_alnum_char()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://url.com/',
+                '99999999',
+                '99999999',
+                59.00,
+                'EUR',
+                '000000156!',
+                '841826491344182719'
+            );
+    }
+
+    public function it_should_throw_exception_if_order_id_contains_whitespace()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://url.com/',
+                '99999999',
+                '99999999',
+                59.00,
+                'EUR',
+                '000000 156',
+                '841826491344182719'
+            );
+    }
+
+    public function it_should_throw_exception_if_order_id_is_empty()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://url.com/',
+                '99999999',
+                '99999999',
+                59.00,
+                'EUR',
+                '',
+                '841826491344182719'
+            );
+    }
+
+    public function it_should_throw_exception_if_order_id_is_too_long()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://url.com/',
+                '99999999',
+                '99999999',
+                59.00,
+                'EUR',
+                '12345678901234567890',
+                '841826491344182719'
+            );
+    }
+
+    public function it_should_throw_exception_if_custom_field_is_too_long()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://url.com/',
+                '99999999',
+                '99999999',
+                59.00,
+                'EUR',
+                '000000156',
+                '841826491344182719',
+                str_repeat('1234567890', 26)
+            );
+    }
+
+    public function it_should_throw_exception_if_description_is_too_long()
+    {
+        $this->shouldThrow(\InvalidArgumentException::class)
+            ->duringGenerate(
+                'https://url.com/',
+                '99999999',
+                '99999999',
+                59.00,
+                'EUR',
+                '000000156',
+                '841826491344182719',
+                '',
+                str_repeat('1234567890', 26)
+            );
+    }
 }
