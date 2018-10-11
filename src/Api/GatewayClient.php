@@ -122,8 +122,8 @@ class GatewayClient implements GatewayClientInterface
         );
         $this->log(
             sprintf(
-            'The request returned the following response: %s',
-            PHP_EOL . print_r($response, true)
+                'The request returned the following response: %s',
+                PHP_EOL . print_r($response, true)
             )
         );
 
