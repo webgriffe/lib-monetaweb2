@@ -11,6 +11,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Webgriffe\LibMonetaWebDue\Api\GatewayClient;
 use Webgriffe\LibMonetaWebDue\Api\GatewayPageInfo;
 use GuzzleHttp\Psr7\ServerRequest;
+use Webgriffe\LibMonetaWebDue\LogicRequestDataContainer;
+use Webgriffe\LibMonetaWebDue\PaymentInit\UrlGeneratorInterface;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\CCPaymentResultInterface;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\MyBankPaymentResultInfo;
 use Webgriffe\LibMonetaWebDue\PaymentNotification\Result\MybankPaymentResultInterface;
@@ -26,8 +28,31 @@ class GatewayClientSpec extends ObjectBehavior
         $this->shouldHaveType(GatewayClient::class);
     }
 
-    public function it_should_make_a_request(ClientInterface $client)
+    public function it_should_make_a_request(ClientInterface $client, UrlGeneratorInterface $urlGenerator)
     {
+        $urlGenerator->generate(
+            'https://www.monetaonline.it/monetaweb/payment/2/xml',
+            '99999999',
+            '99999999',
+            1428.7,
+            null,
+            'ITA',
+            'http://www.merchant.it/notify.jsp',
+            null,
+            'TRCK0001',
+            null,
+            null,
+            null,
+            null,
+            UrlGeneratorInterface::OPERATION_TYPE_INITIALIZE
+        )->shouldBeCalled()->willReturn(
+            new LogicRequestDataContainer(
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
+                'POST',
+                array()
+            )
+        );
+
         $expectedResponseBody = <<<XML
 <?xml version='1.0' ?>
 <response>
@@ -46,7 +71,7 @@ XML;
             ->shouldBeCalled()
             ->willReturn($expectedResponse);
 
-        $this->beConstructedWith($client);
+        $this->beConstructedWith($client, null, $urlGenerator);
         $this->getPaymentPageInfo(
             'https://www.monetaonline.it/monetaweb/payment/2/xml',
             '99999999',
@@ -67,30 +92,33 @@ XML;
             );
     }
 
-    public function it_should_throw_error_when_parameters_are_wrong(ClientInterface $client)
-    {
-        $client->request(
-            'POST',
+    public function it_should_throw_exception_when_the_gateway_response_is_an_error(
+        ClientInterface $client,
+        UrlGeneratorInterface $urlGenerator
+    ) {
+        $urlGenerator->generate(
             'https://www.monetaonline.it/monetaweb/payment/2/xml',
-            Argument::type('array')
-        )->shouldNotBeCalled();
-        $this->beConstructedWith($client);
-        $this->shouldThrow(\InvalidArgumentException::class)
-            ->duringGetPaymentPageInfo(
-                null,
-                null,
-                null,
-                null,
-                null,
-                'ITA',
-                'http://www.merchant.it/notify.jsp',
-                null,
-                'TRCK0001'
-            );
-    }
+            '99999999',
+            '99999999',
+            1428.7,
+            null,
+            'ITA',
+            'http://www.merchant.it/notify.jsp',
+            null,
+            'TRCK0001',
+            null,
+            null,
+            null,
+            null,
+            UrlGeneratorInterface::OPERATION_TYPE_INITIALIZE
+        )->shouldBeCalled()->willReturn(
+            new LogicRequestDataContainer(
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
+                'POST',
+                array()
+            )
+        );
 
-    public function it_should_throw_exception_when_the_gateway_response_is_an_error(ClientInterface $client)
-    {
         $expectedResponseBody = <<<XML
 <?xml version='1.0' ?>
 <error>
@@ -105,7 +133,55 @@ XML;
             'https://www.monetaonline.it/monetaweb/payment/2/xml',
             Argument::type('array')
         )->shouldBeCalled()->willReturn($expectedResponse);
-        $this->beConstructedWith($client);
+        $this->beConstructedWith($client, null, $urlGenerator);
+        $this->shouldThrow(\RuntimeException::class)
+            ->duringGetPaymentPageInfo(
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
+                '99999999',
+                '99999999',
+                1428.7,
+                null,
+                'ITA',
+                'http://www.merchant.it/notify.jsp',
+                null,
+                'TRCK0001'
+            );
+    }
+
+    public function it_should_throw_exception_when_the_gateway_response_is_not_a_valid_xml(
+        ClientInterface $client,
+        UrlGeneratorInterface $urlGenerator
+    ) {
+        $urlGenerator->generate(
+            'https://www.monetaonline.it/monetaweb/payment/2/xml',
+            '99999999',
+            '99999999',
+            1428.7,
+            null,
+            'ITA',
+            'http://www.merchant.it/notify.jsp',
+            null,
+            'TRCK0001',
+            null,
+            null,
+            null,
+            null,
+            UrlGeneratorInterface::OPERATION_TYPE_INITIALIZE
+        )->shouldBeCalled()->willReturn(
+            new LogicRequestDataContainer(
+                'https://www.monetaonline.it/monetaweb/payment/2/xml',
+                'POST',
+                array()
+            )
+        );
+
+        $client->request(
+            'POST',
+            'https://www.monetaonline.it/monetaweb/payment/2/xml',
+            Argument::type('array')
+        )->shouldBeCalled()->willReturn(new Response(200, [], 'sudifghsihgis'));
+
+        $this->beConstructedWith($client, null, $urlGenerator);
         $this->shouldThrow(\RuntimeException::class)
             ->duringGetPaymentPageInfo(
                 'https://www.monetaonline.it/monetaweb/payment/2/xml',

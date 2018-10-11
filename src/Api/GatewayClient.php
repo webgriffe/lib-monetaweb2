@@ -110,17 +110,36 @@ class GatewayClient implements GatewayClientInterface
         );
 
         $this->log(
-            sprintf('Doing a request with the following data: %s', PHP_EOL . print_r($requestData->getParams(), true))
+            sprintf(
+                'Doing a request with the following data: %s',
+                PHP_EOL . print_r($requestData->getParams(), true)
+            )
         );
         $response = $this->client->request(
             $requestData->getMethod(),
             $requestData->getUrl(),
             ['form_params' => $requestData->getParams()]
         );
-        $this->log(sprintf('The request returned the following response: %s', PHP_EOL . print_r($response, true)));
+        $this->log(
+            sprintf(
+            'The request returned the following response: %s',
+            PHP_EOL . print_r($response, true)
+            )
+        );
 
-        // todo: handle xml parsing errors
-        $parsedResponseBody = simplexml_load_string($response->getBody());
+        try {
+            $parsedResponseBody = simplexml_load_string($response->getBody());
+        } catch (\Exception $ex) {
+            $this->log(
+                sprintf(
+                    'The request could not be parsed as XML. Request content:'.PHP_EOL.'%s',
+                    $response->getBody()
+                ),
+                LogLevel::CRITICAL
+            );
+            throw new \RuntimeException($ex->getMessage(), $ex->getCode(), $ex);
+        }
+
         // todo: it could throw a custom exception that encapsulate the error code and message
         if (isset($parsedResponseBody->errorcode) || isset($parsedResponseBody->errormessage)) {
             $message = sprintf(
@@ -146,34 +165,6 @@ class GatewayClient implements GatewayClientInterface
         );
 
         return $gatewayPageInfo;
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     *
-     * @return PaymentResultInterface
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function handleNotify(ServerRequestInterface $request)
-    {
-        $this->log('Handle notify method called');
-        $mapper = new Mapper($this->logger);
-        return $mapper->map($request);
-    }
-
-    /**
-     * @param string $storedSecurityToken
-     * @param NonErrorPaymentResultInterface $paymentResult
-     * @return bool
-     */
-    public function verifySecurityToken($storedSecurityToken, NonErrorPaymentResultInterface $paymentResult)
-    {
-        if (function_exists('hash_equals')) {
-            return hash_equals($storedSecurityToken, $paymentResult->getSecurityToken());
-        }
-
-        return strcmp($storedSecurityToken, $paymentResult->getSecurityToken()) === 0;
     }
 
     /**
@@ -225,6 +216,34 @@ class GatewayClient implements GatewayClientInterface
 
         $mapper = new \Webgriffe\LibMonetaWebDue\PaymentCapture\Response\Mapper($this->logger);
         return $mapper->map($response);
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     *
+     * @return PaymentResultInterface
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function handleNotify(ServerRequestInterface $request)
+    {
+        $this->log('Handle notify method called');
+        $mapper = new Mapper($this->logger);
+        return $mapper->map($request);
+    }
+
+    /**
+     * @param string $storedSecurityToken
+     * @param NonErrorPaymentResultInterface $paymentResult
+     * @return bool
+     */
+    public function verifySecurityToken($storedSecurityToken, NonErrorPaymentResultInterface $paymentResult)
+    {
+        if (function_exists('hash_equals')) {
+            return hash_equals($storedSecurityToken, $paymentResult->getSecurityToken());
+        }
+
+        return strcmp($storedSecurityToken, $paymentResult->getSecurityToken()) === 0;
     }
 
     private function log($message, $level = LogLevel::DEBUG)
