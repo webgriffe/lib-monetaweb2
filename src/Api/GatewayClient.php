@@ -129,6 +129,9 @@ class GatewayClient implements GatewayClientInterface
 
         try {
             $parsedResponseBody = simplexml_load_string($response->getBody());
+            if (!$parsedResponseBody) {
+                throw new \RuntimeException('Could not parse response body as XML');
+            }
         } catch (\Exception $ex) {
             $this->log(
                 sprintf(

@@ -38,9 +38,14 @@ class Mapper implements MapperInterface
         $rawXml = $response->getBody()->getContents();
         $this->log('Capture response: '.$rawXml);
 
-        $xml = simplexml_load_string($rawXml);
-        if (!$xml) {
-            throw new \RuntimeException('Could not parse response body as XML');
+        try {
+            $xml = simplexml_load_string($rawXml);
+            if (!$xml) {
+                throw new \RuntimeException('Could not parse response body as XML');
+            }
+        } catch (\Exception $ex) {
+            $this->log('Could not parse XML string. Content was: '.PHP_EOL.$rawXml, LogLevel::CRITICAL);
+            throw new \RuntimeException($ex->getMessage(), $ex->getCode(), $ex);
         }
 
         if (isset($xml->errorcode) || isset($xml->errormessage)) {
